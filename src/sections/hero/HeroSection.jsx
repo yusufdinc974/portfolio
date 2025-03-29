@@ -15,15 +15,32 @@ const HeroSection = () => {
   const subtitleRef = useRef(null);
   const buttonsRef = useRef(null);
   const [hasAnimated, setHasAnimated] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   
   // Array of tech terms for rotation in subtitle
   const techTerms = [
     "digital circuits",
-    "embedded systems",
+    "my own projects",
     "innovative software",
     "hardware solutions",
     "cutting-edge tech"
   ];
+  
+  // Check if we're on mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    // Initial check
+    checkMobile();
+    
+    // Add event listener for window resize
+    window.addEventListener('resize', checkMobile);
+    
+    // Cleanup
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   
   // Initialize typewriter animation once component mounts
   useEffect(() => {
@@ -51,7 +68,7 @@ const HeroSection = () => {
     tl.fromTo(titleRef.current,
       { text: "", opacity: 1 },
       { 
-        text: "Computer Engineer", 
+        text: "Computer Engineering Student", 
         duration: 1.2, 
         ease: "none"
       },
@@ -109,7 +126,7 @@ const HeroSection = () => {
   
   // Handle parallax effect on scroll
   useEffect(() => {
-    if (!sectionRef.current) return;
+    if (!sectionRef.current || isMobile) return;
     
     const section = sectionRef.current;
     const handleScroll = () => {
@@ -135,7 +152,7 @@ const HeroSection = () => {
     window.addEventListener('scroll', handleScroll);
     
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [isMobile]);
   
   return (
     <section id="home" className="hero-section" ref={sectionRef}>
@@ -143,10 +160,10 @@ const HeroSection = () => {
         <div className="hero-content">
           <div className="hero-text">
             <h3 className="hero-greeting" ref={greetingRef}>Hello, I'm</h3>
-            <h1 className="hero-name" ref={nameRef}>Your Name</h1>
+            <h1 className="hero-name" ref={nameRef}>Yusuf</h1>
             <h2 className="hero-title" ref={titleRef}></h2>
             <p className="hero-subtitle" ref={subtitleRef}>
-              Building <span className="rotating-term text-electric">{techTerms[0]}</span> and innovative solutions
+              Building <span className="rotating-term text-electric">{techTerms[0]}</span> with innovative ideas!
             </p>
             <div className="hero-buttons" ref={buttonsRef}>
               <a href="#projects" className="btn-primary">
@@ -159,7 +176,12 @@ const HeroSection = () => {
             </div>
           </div>
           <div className="hero-visual">
-            <HeroAnimation />
+            {!isMobile && <HeroAnimation />}
+            {isMobile && (
+              <div className="mobile-hero-placeholder">
+                {/* Mobile view - animation removed */}
+              </div>
+            )}
           </div>
         </div>
       </div>

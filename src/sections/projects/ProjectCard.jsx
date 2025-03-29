@@ -44,38 +44,47 @@ const ProjectCard = ({ project, onClick }) => {
   // Derive a color from the project ID for variety
   const generateColor = (id) => {
     const colors = ['#3498db', '#2ecc71', '#e74c3c', '#9b59b6', '#f39c12', '#1abc9c'];
+    // If id is a string, convert to a number by summing character codes
+    if (typeof id === 'string') {
+      const numValue = id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+      return colors[numValue % colors.length];
+    }
     return colors[id % colors.length];
   };
   
   const circuitColor = generateColor(project.id);
   
+  // Get project name (handle both old and new data structure)
+  const projectName = project.name || project.title || "Project";
+  const isFeatured = project.featured || false;
+  
   return (
     <div 
-      className={`project-card ${project.featured ? 'featured' : ''}`}
+      className={`project-card ${isFeatured ? 'featured' : ''}`}
       ref={cardRef}
       onClick={onClick}
     >
       <div className="project-thumbnail">
         {/* Placeholder for project image - in real implementation, use actual images */}
         <div className="image-placeholder" style={{ backgroundColor: `${circuitColor}30` }}>
-          {project.title.charAt(0)}
+          {projectName.charAt(0)}
         </div>
         
         {/* Featured badge */}
-        {project.featured && (
+        {isFeatured && (
           <div className="featured-badge">Featured</div>
         )}
       </div>
       
       <div className="project-info">
-        <h3 className="project-title">{project.title}</h3>
+        <h3 className="project-title">{projectName}</h3>
         <p className="project-description">{project.description}</p>
         
         <div className="project-tech">
-          {project.technologies.slice(0, 3).map((tech, index) => (
+          {project.technologies && project.technologies.slice(0, 3).map((tech, index) => (
             <span key={index} className="tech-tag">{tech}</span>
           ))}
-          {project.technologies.length > 3 && (
+          {project.technologies && project.technologies.length > 3 && (
             <span className="tech-tag">+{project.technologies.length - 3} more</span>
           )}
         </div>
@@ -87,7 +96,7 @@ const ProjectCard = ({ project, onClick }) => {
           <div className="project-links">
             {project.github && (
               <a 
-                href={project.github} 
+                href={typeof project.github === 'string' ? project.github : project.github[0]} 
                 className="github-link"
                 onClick={(e) => e.stopPropagation()}
                 target="_blank"

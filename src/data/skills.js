@@ -1,144 +1,57 @@
-// Sample skills data
+// Updated skills.js
 export const skills = [
+    {
+      name: "Programming Languages",
+      items: [
+        { id: "c", name: "C", level: 90, description: "Systems programming, memory management" },
+        { id: "cpp", name: "C++", level: 85, description: "OOP, data structures, algorithms" },
+        { id: "python", name: "Python", level: 80, description: "Scripting, Flask, automation" },
+        { id: "javascript", name: "JavaScript", level: 85, description: "React, async programming" },
+        { id: "lisp", name: "Common Lisp", level: 70, description: "Functional programming, macros" }
+      ]
+    },
     {
       name: "Frontend",
       items: [
-        {
-          id: "html",
-          name: "HTML",
-          level: 95,
-          description: "Semantic HTML5, accessibility, SEO optimization"
-        },
-        {
-          id: "css",
-          name: "CSS",
-          level: 90,
-          description: "Responsive design, animations, CSS-in-JS, SASS/SCSS"
-        },
-        {
-          id: "javascript",
-          name: "JavaScript",
-          level: 85,
-          description: "ES6+, DOM manipulation, async programming"
-        },
-        {
-          id: "react",
-          name: "React",
-          level: 88,
-          description: "Hooks, Context API, Redux, Next.js"
-        },
-        {
-          id: "vue",
-          name: "Vue.js",
-          level: 75,
-          description: "Vue 3, Composition API, Vuex"
-        }
+        { id: "react", name: "React", level: 88, description: "Hooks, Context API, Electron.js" },
+        { id: "html", name: "HTML", level: 95, description: "Semantic HTML5, accessibility" },
+        { id: "css", name: "CSS", level: 90, description: "Responsive design, animations" }
       ]
     },
     {
-      name: "Backend",
+      name: "Backend & Databases",
       items: [
-        {
-          id: "node",
-          name: "Node.js",
-          level: 80,
-          description: "Express, RESTful APIs, authentication"
-        },
-        {
-          id: "python",
-          name: "Python",
-          level: 75,
-          description: "Flask, Django, data processing"
-        },
-        {
-          id: "database",
-          name: "Databases",
-          level: 82,
-          description: "MongoDB, PostgreSQL, Redis"
-        },
-        {
-          id: "api",
-          name: "API Design",
-          level: 85,
-          description: "REST, GraphQL, WebSockets"
-        }
+        { id: "node", name: "Node.js", level: 80, description: "Express, API development" },
+        { id: "flask", name: "Flask", level: 75, description: "Python microservices" },
+        { id: "mongo", name: "MongoDB", level: 82, description: "NoSQL, aggregation pipeline" },
+        { id: "postgres", name: "PostgreSQL", level: 78, description: "SQL queries, indexing" }
       ]
     },
     {
-      name: "DevOps",
+      name: "DevOps & Tools",
       items: [
-        {
-          id: "docker",
-          name: "Docker",
-          level: 70,
-          description: "Containerization, Docker Compose"
-        },
-        {
-          id: "ci-cd",
-          name: "CI/CD",
-          level: 75,
-          description: "GitHub Actions, Jenkins, automated testing"
-        },
-        {
-          id: "cloud",
-          name: "Cloud Services",
-          level: 65,
-          description: "AWS, Firebase, Netlify, Vercel"
-        }
+        { id: "git", name: "Git", level: 90, description: "Version control, branching strategies" },
+        { id: "linux", name: "Linux", level: 85, description: "Shell scripting, system administration" },
+        { id: "docker", name: "Docker", level: 75, description: "Containerization, CI/CD" }
       ]
     },
     {
       name: "Embedded Systems",
       items: [
-        {
-          id: "arduino",
-          name: "Arduino",
-          level: 85,
-          description: "Sensors, actuators, IoT prototyping"
-        },
-        {
-          id: "raspberry-pi",
-          name: "Raspberry Pi",
-          level: 80,
-          description: "Linux, GPIO, embedded applications"
-        },
-        {
-          id: "embedded-c",
-          name: "Embedded C",
-          level: 75,
-          description: "Microcontroller programming, firmware development"
-        }
+        { id: "arduino", name: "Arduino", level: 85, description: "IoT, sensor integration" },
+        { id: "raspberry-pi", name: "Raspberry Pi", level: 80, description: "GPIO, embedded Linux" }
       ]
     },
     {
-      name: "Tools & Others",
+      name: "Languages",
       items: [
-        {
-          id: "git",
-          name: "Git",
-          level: 90,
-          description: "Version control, branching strategies, collaboration"
-        },
-        {
-          id: "figma",
-          name: "Figma",
-          level: 75,
-          description: "UI/UX design, prototyping, design systems"
-        },
-        {
-          id: "testing",
-          name: "Testing",
-          level: 80,
-          description: "Jest, React Testing Library, end-to-end testing"
-        },
-        {
-          id: "agile",
-          name: "Agile",
-          level: 85,
-          description: "Scrum, Kanban, project management"
-        }
+        { id: "turkish", name: "Turkish", level: 100, description: "Native language" },
+        { id: "english", name: "English", level: 95, description: "Fluent, academic writing" },
+        { id: "japanese", name: "Japanese", level: 75, description: "JLPT N3, independent learner" },
+        { id: "spanish", name: "Spanish", level: 50, description: "A2 level, conversational" },
+        { id: "russian", name: "Russian", level: 30, description: "Beginner, learning cases" }
       ]
     }
-  ];
-  
-  export default skills;
+];
+
+export default skills;

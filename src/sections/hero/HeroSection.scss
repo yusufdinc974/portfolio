@@ -353,3 +353,26 @@
   50% { opacity: 1; }
   100% { opacity: 0; }
 }
+
+/* Add this to your HeroSection.scss file */
+
+.mobile-hero-placeholder {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    min-height: 150px; /* Ensure there's still some space in the layout */
+    
+    /* Optional: Add a subtle circuit-like pattern or glow effect if desired */
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, rgba(0, 240, 255, 0.05) 0%, rgba(0, 0, 0, 0) 70%);
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  }

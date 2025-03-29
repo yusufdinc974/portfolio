@@ -82,10 +82,24 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
   // Generate a color based on project ID
   const generateColor = (id) => {
     const colors = ['#3498db', '#2ecc71', '#e74c3c', '#9b59b6', '#f39c12', '#1abc9c'];
+    // Handle string IDs
+    if (typeof id === 'string') {
+      const numValue = id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+      return colors[numValue % colors.length];
+    }
     return colors[id % colors.length];
   };
   
   const circuitColor = generateColor(project.id);
+  
+  // Get project name (handle both old and new data structure)
+  const projectName = project.name || project.title || "Project";
+  
+  // Handle missing details in the new data structure
+  const details = project.details || {};
+  const challenge = details.challenge || "This project presented various technical challenges that were addressed through innovative solutions.";
+  const solution = details.solution || `${projectName} was developed using ${project.technologies ? project.technologies.join(', ') : 'various technologies'}.`;
+  const outcome = details.outcome || "The project was successfully completed and met all the required specifications.";
   
   return (
     <div className="project-modal-container" ref={modalRef} onClick={handleClose}>
@@ -95,7 +109,7 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
         <button className="modal-close-btn" onClick={handleClose}>×</button>
         
         <div className="modal-header">
-          <h2 className="modal-title">{project.title}</h2>
+          <h2 className="modal-title">{projectName}</h2>
           
           {/* Circuit decoration */}
           <div className="modal-circuit-header">
@@ -114,7 +128,7 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
           <div className="project-images">
             {/* For demo, just showing one image with a placeholder */}
             <div className="project-image-placeholder" style={{ backgroundColor: `${circuitColor}30` }}>
-              {project.title.charAt(0)}
+              {projectName.charAt(0)}
             </div>
           </div>
           
@@ -126,23 +140,23 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
             
             <div className="details-section">
               <h3>The Challenge</h3>
-              <p>{project.details.challenge}</p>
+              <p>{challenge}</p>
             </div>
             
             <div className="details-section">
               <h3>My Solution</h3>
-              <p>{project.details.solution}</p>
+              <p>{solution}</p>
             </div>
             
             <div className="details-section">
               <h3>Outcome</h3>
-              <p>{project.details.outcome}</p>
+              <p>{outcome}</p>
             </div>
             
             <div className="details-section">
               <h3>Technologies Used</h3>
               <div className="tech-tags">
-                {project.technologies.map((tech, index) => (
+                {project.technologies && project.technologies.map((tech, index) => (
                   <span key={index} className="tech-tag">{tech}</span>
                 ))}
               </div>
@@ -154,7 +168,7 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
           <div className="project-links">
             {project.github && (
               <a 
-                href={project.github} 
+                href={typeof project.github === 'string' ? project.github : project.github[0]} 
                 className="github-link"
                 target="_blank"
                 rel="noopener noreferrer"
