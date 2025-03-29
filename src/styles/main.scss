@@ -1,0 +1,153 @@
+@use 'base/reset';
+@use 'base/variables' as vars;
+@use 'base/typography';
+@use 'layout/grid';
+@use 'layout/header';
+@use 'layout/footer';
+@use 'components/buttons';
+@use 'components/cards';
+@use 'components/circuit';
+@use 'components/forms';
+@use 'components/about';    // Added about styles
+@use 'components/projects'; // Added projects styles
+@use 'components/skills';   // Added skills styles
+@use 'animations/transitions';
+@use 'animations/keyframes';
+@use 'themes/dark';
+
+// New component styles 
+@use '../components/circuit/CircuitNode.scss';
+@use '../components/circuit/CircuitPath.scss';
+@use '../sections/skills/SkillCircuitGraph.scss';
+@use '../sections/skills/SkillsSection.scss';
+@use '../sections/contact/ContactSection.scss';
+
+/* Main app styles */
+body {
+  background-color: vars.$navy-blue;
+  overflow-x: hidden;
+  position: relative;
+}
+
+// Add circuit background
+.circuit-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: vars.$z-negative;
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+// Section styling
+.section {
+  padding: vars.$spacing-12 0;
+  position: relative;
+  overflow: hidden;
+  
+  @media (max-width: vars.$breakpoint-md) {
+    padding: vars.$spacing-8 0;
+  }
+}
+
+// Loading animation
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: vars.$navy-blue;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  transition: opacity 0.5s ease-in-out;
+  
+  .circuit-loader {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+// Utility classes
+.text-electric {
+  color: vars.$electric-blue;
+}
+
+.text-teal {
+  color: vars.$teal;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.mb-1 {
+  margin-bottom: vars.$spacing-1;
+}
+
+.mb-2 {
+  margin-bottom: vars.$spacing-2;
+}
+
+.mb-3 {
+  margin-bottom: vars.$spacing-3;
+}
+
+.mb-4 {
+  margin-bottom: vars.$spacing-4;
+}
+
+.mb-5 {
+  margin-bottom: vars.$spacing-5;
+}
+
+.mt-1 {
+  margin-top: vars.$spacing-1;
+}
+
+.mt-2 {
+  margin-top: vars.$spacing-2;
+}
+
+.mt-3 {
+  margin-top: vars.$spacing-3;
+}
+
+.mt-4 {
+  margin-top: vars.$spacing-4;
+}
+
+.mt-5 {
+  margin-top: vars.$spacing-5;
+}
+
+// Add circuit theme color variables
+:root {
+  // Circuit theme colors
+  --color-circuit-path: rgba(75, 207, 250, 0.7);
+  --color-circuit-path-dim: rgba(75, 207, 250, 0.3);
+  --color-background-rgb: 18, 24, 38;
+  --color-accent-rgb: 75, 207, 250;
+  
+  // Category colors
+  --color-blue: #4bcffa;
+  --color-green: #26de81;
+  --color-orange: #fd9644;
+  --color-purple: #a55eea;
+  --color-teal: #2bcbba;
+  
+  // Category mapping
+  --color-category-0: var(--color-blue);
+  --color-category-1: var(--color-green);
+  --color-category-2: var(--color-orange);
+  --color-category-3: var(--color-purple);
+  --color-category-4: var(--color-teal);
+}

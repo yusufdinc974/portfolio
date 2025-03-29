@@ -1,0 +1,53 @@
+.circuit-path {
+    fill: none;
+    stroke-linecap: round;
+    transition: stroke 0.3s ease, stroke-width 0.3s ease, filter 0.3s ease;
+    filter: drop-shadow(0 0 2px rgba(var(--color-accent-rgb), 0.3));
+    
+    &.blink-effect {
+      animation: path-blink 3s infinite;
+      
+      // Create variation in blink timing
+      &:nth-child(3n) {
+        animation-delay: 0.5s;
+      }
+      
+      &:nth-child(3n+1) {
+        animation-delay: 1s;
+      }
+      
+      &:nth-child(3n+2) {
+        animation-delay: 1.5s;
+      }
+    }
+    
+    &.active {
+      stroke: var(--color-accent);
+      stroke-width: 3;
+      filter: drop-shadow(0 0 4px rgba(var(--color-accent-rgb), 0.5));
+    }
+  }
+  
+  // Create a subtle blink effect for paths
+  @keyframes path-blink {
+    0%, 100% {
+      opacity: 0.7;
+      filter: drop-shadow(0 0 2px rgba(var(--color-accent-rgb), 0.3));
+    }
+    50% {
+      opacity: 1;
+      filter: drop-shadow(0 0 4px rgba(var(--color-accent-rgb), 0.5));
+    }
+  }
+  
+  // Add data-flow animation for active paths
+  .circuit-path.data-flow {
+    stroke-dasharray: 10, 5;
+    animation: flow-animation 20s linear infinite;
+  }
+  
+  @keyframes flow-animation {
+    to {
+      stroke-dashoffset: -300;
+    }
+  }

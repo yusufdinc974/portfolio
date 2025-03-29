@@ -1,0 +1,174 @@
+@use 'sass:color';
+@use '../base/variables' as vars;
+
+/* Base button style */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: vars.$spacing-2 vars.$spacing-4;
+  font-family: vars.$font-body;
+  font-size: vars.$font-size-base;
+  font-weight: 500;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  transition: all vars.$transition-base;
+  position: relative;
+  overflow: hidden;
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  /* Size variants */
+  &--sm {
+    padding: vars.$spacing-1 vars.$spacing-3;
+    font-size: vars.$font-size-sm;
+  }
+  
+  &--lg {
+    padding: vars.$spacing-3 vars.$spacing-6;
+    font-size: vars.$font-size-lg;
+  }
+  
+  /* Button variants */
+  &--primary {
+    background-color: vars.$electric-blue;
+    color: vars.$navy-blue;
+    
+    &:hover, &:focus {
+      background-color: color.adjust(vars.$electric-blue, $lightness: -10%);
+    }
+    
+    &:active {
+      background-color: color.adjust(vars.$electric-blue, $lightness: -15%);
+    }
+  }
+  
+  &--secondary {
+    background-color: transparent;
+    color: vars.$electric-blue;
+    border-color: vars.$electric-blue;
+    
+    &:hover, &:focus {
+      background-color: rgba(vars.$electric-blue, 0.1);
+    }
+    
+    &:active {
+      background-color: rgba(vars.$electric-blue, 0.2);
+    }
+  }
+  
+  &--text {
+    background-color: transparent;
+    color: vars.$electric-blue;
+    padding-left: 0;
+    padding-right: 0;
+    
+    &:hover, &:focus {
+      color: color.adjust(vars.$electric-blue, $lightness: -10%);
+      text-decoration: none;
+    }
+  }
+}
+
+/* Circuit-themed button */
+.btn-circuit {
+  position: relative;
+  background-color: transparent;
+  color: vars.$electric-blue;
+  border: 1px solid vars.$electric-blue;
+  font-family: vars.$font-code;
+  padding: vars.$spacing-3 vars.$spacing-5;
+  overflow: visible;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(vars.$electric-blue, 0);
+    transition: background-color vars.$transition-base;
+    z-index: -1;
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 10px;
+    height: 10px;
+    background-color: vars.$navy-blue;
+    border: 1px solid vars.$electric-blue;
+    z-index: 1;
+  }
+  
+  &:hover, &:focus {
+    color: vars.$navy-blue;
+    
+    &::before {
+      background-color: vars.$electric-blue;
+    }
+  }
+  
+  /* Circuit trails */
+  .circuit-trail {
+    position: absolute;
+    background-color: transparent;
+    border: 1px solid vars.$electric-blue;
+    
+    &--top {
+      top: -10px;
+      right: 10px;
+      width: 20px;
+      height: 1px;
+    }
+    
+    &--right {
+      top: 10px;
+      right: -10px;
+      width: 1px;
+      height: 15px;
+    }
+    
+    &--bottom {
+      bottom: -7px;
+      left: 15px;
+      width: 25px;
+      height: 1px;
+    }
+    
+    &--left {
+      bottom: 10px;
+      left: -7px;
+      width: 1px;
+      height: 10px;
+    }
+  }
+}
+
+/* Glowing button for CTA */
+.btn-glow {
+  background-color: vars.$electric-blue;
+  color: vars.$navy-blue;
+  border: none;
+  font-weight: 600;
+  box-shadow: 0 0 10px rgba(vars.$electric-blue, 0.5);
+  transition: all vars.$transition-base;
+  
+  &:hover, &:focus {
+    box-shadow: 0 0 20px rgba(vars.$electric-blue, 0.8);
+    transform: translateY(-2px);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+}

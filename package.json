@@ -1,0 +1,40 @@
+{
+    "name": "circuit-portfolio",
+    "version": "1.0.0",
+    "description": "Circuit Board Themed Portfolio Website",
+    "main": "index.js",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview",
+        "lint": "eslint src --ext js,jsx --report-unused-disable-directives",
+        "format": "prettier --write \"src/**/*.{js,jsx,scss}\""
+    },
+    "keywords": [
+        "portfolio",
+        "circuit",
+        "react"
+    ],
+    "author": "Yusuf Dinç",
+    "license": "MIT",
+    "dependencies": {
+        "animejs": "^3.2.2",
+        "gsap": "^3.12.5",
+        "lottie-web": "^5.12.2",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
+        "react-router-dom": "^6.22.2",
+        "three": "^0.159.0"
+    },
+    "devDependencies": {
+        "@vitejs/plugin-react": "^4.3.4",
+        "autoprefixer": "^10.4.17",
+        "eslint": "^8.56.0",
+        "eslint-plugin-react": "^7.33.2",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "postcss": "^8.4.35",
+        "prettier": "^3.2.5",
+        "sass": "^1.71.1",
+        "vite": "^5.4.15"
+    }
+}

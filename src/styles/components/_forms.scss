@@ -1,0 +1,207 @@
+@use '../base/variables' as vars;
+
+/* Form container */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-5;
+  width: 100%;
+  
+  &--inline {
+    flex-direction: row;
+    align-items: flex-end;
+    flex-wrap: wrap;
+  }
+}
+
+/* Form group */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-2;
+  
+  &--inline {
+    flex-direction: row;
+    align-items: center;
+    gap: vars.$spacing-3;
+  }
+}
+
+/* Form label */
+.form-label {
+  font-family: vars.$font-heading;
+  font-size: vars.$font-size-sm;
+  color: vars.$white;
+  margin-bottom: 0;
+}
+
+/* Form input */
+.form-input {
+  font-family: vars.$font-body;
+  font-size: vars.$font-size-base;
+  color: vars.$white;
+  background-color: rgba(vars.$dark-gray, 0.2);
+  border: 1px solid vars.$dark-gray;
+  border-radius: 4px;
+  padding: vars.$spacing-2 vars.$spacing-3;
+  width: 100%;
+  transition: all vars.$transition-base;
+  
+  &:focus {
+    outline: none;
+    border-color: vars.$electric-blue;
+    box-shadow: 0 0 0 2px rgba(vars.$electric-blue, 0.3);
+  }
+  
+  &::placeholder {
+    color: rgba(vars.$light-gray, 0.5);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  /* Input types */
+  &--textarea {
+    min-height: 120px;
+    resize: vertical;
+  }
+}
+
+/* Circuit-themed input */
+.circuit-input {
+  position: relative;
+  margin-bottom: vars.$spacing-4;
+  
+  &__field {
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid vars.$dark-gray;
+    color: vars.$white;
+    padding: vars.$spacing-2 0;
+    font-family: vars.$font-code;
+    transition: border-color vars.$transition-base;
+    
+    &:focus {
+      outline: none;
+      border-color: vars.$electric-blue;
+      
+      & + .circuit-input__label {
+        color: vars.$electric-blue;
+        transform: translateY(-1.5rem) scale(0.8);
+      }
+    }
+    
+    &:not(:placeholder-shown) + .circuit-input__label {
+      transform: translateY(-1.5rem) scale(0.8);
+    }
+  }
+  
+  &__label {
+    position: absolute;
+    left: 0;
+    top: vars.$spacing-2;
+    color: vars.$light-gray;
+    pointer-events: none;
+    transition: transform vars.$transition-base, color vars.$transition-base;
+    transform-origin: left;
+  }
+  
+  &__border {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 1px;
+    width: 100%;
+    
+    &::before, &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      width: 0;
+      height: 2px;
+      background-color: vars.$electric-blue;
+      transition: width vars.$transition-slow;
+    }
+    
+    &::before {
+      left: 50%;
+    }
+    
+    &::after {
+      right: 50%;
+    }
+  }
+  
+  &__field:focus ~ .circuit-input__border::before,
+  &__field:focus ~ .circuit-input__border::after {
+    width: 50%;
+  }
+}
+
+/* Form validation styles */
+.form-feedback {
+  font-size: vars.$font-size-sm;
+  margin-top: vars.$spacing-1;
+  
+  &--error {
+    color: vars.$red-accent;
+  }
+  
+  &--success {
+    color: vars.$teal;
+  }
+}
+
+.form-input--error {
+  border-color: vars.$red-accent;
+  
+  &:focus {
+    box-shadow: 0 0 0 2px rgba(vars.$red-accent, 0.3);
+  }
+}
+
+.form-check {
+  display: flex;
+  align-items: center;
+  gap: vars.$spacing-2;
+  
+  &__input {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 1px solid vars.$dark-gray;
+    border-radius: 3px;
+    background-color: rgba(vars.$dark-gray, 0.2);
+    display: grid;
+    place-content: center;
+    
+    &::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      transform: scale(0);
+      transition: transform vars.$transition-fast;
+      box-shadow: inset 1em 1em vars.$electric-blue;
+      transform-origin: center;
+      clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    }
+    
+    &:checked::before {
+      transform: scale(1);
+    }
+    
+    &:focus {
+      outline: none;
+      border-color: vars.$electric-blue;
+      box-shadow: 0 0 0 2px rgba(vars.$electric-blue, 0.3);
+    }
+  }
+  
+  &__label {
+    font-size: vars.$font-size-sm;
+    color: vars.$light-gray;
+  }
+}

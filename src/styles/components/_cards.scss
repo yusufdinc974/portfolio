@@ -1,0 +1,244 @@
+@use '../base/variables' as vars;
+
+/* Base card styles */
+.card {
+  background-color: rgba(vars.$dark-gray, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform vars.$transition-base, box-shadow vars.$transition-base;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: vars.$shadow-lg;
+  }
+  
+  &__header {
+    padding: vars.$spacing-4;
+    border-bottom: 1px solid rgba(vars.$light-gray, 0.1);
+  }
+  
+  &__body {
+    padding: vars.$spacing-4;
+  }
+  
+  &__footer {
+    padding: vars.$spacing-4;
+    border-top: 1px solid rgba(vars.$light-gray, 0.1);
+  }
+  
+  &__title {
+    font-family: vars.$font-heading;
+    font-size: vars.$font-size-xl;
+    margin-bottom: vars.$spacing-2;
+  }
+  
+  &__subtitle {
+    font-size: vars.$font-size-sm;
+    color: rgba(vars.$light-gray, 0.7);
+    margin-bottom: 0;
+  }
+}
+
+/* Circuit-themed card */
+.circuit-card {
+  position: relative;
+  background-color: rgba(vars.$navy-blue, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(vars.$electric-blue, 0.3);
+  border-radius: 8px;
+  padding: vars.$spacing-5;
+  overflow: hidden;
+  transition: all vars.$transition-base;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    background: linear-gradient(45deg, transparent, transparent, vars.$electric-blue, transparent, transparent);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity vars.$transition-base;
+  }
+  
+  &:hover {
+    transform: translateY(-5px);
+    border-color: rgba(vars.$electric-blue, 0.6);
+    
+    &::before {
+      opacity: 0.5;
+    }
+  }
+  
+  /* Circuit node decorations */
+  &__node {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background-color: vars.$electric-blue;
+    border-radius: 50%;
+    
+    &--tl {
+      top: -4px;
+      left: -4px;
+    }
+    
+    &--tr {
+      top: -4px;
+      right: -4px;
+    }
+    
+    &--bl {
+      bottom: -4px;
+      left: -4px;
+    }
+    
+    &--br {
+      bottom: -4px;
+      right: -4px;
+    }
+  }
+  
+  /* Circuit lines */
+  &__line {
+    position: absolute;
+    background-color: rgba(vars.$electric-blue, 0.3);
+    
+    &--top {
+      top: 10px;
+      left: 20px;
+      height: 1px;
+      width: 30px;
+    }
+    
+    &--right {
+      top: 20px;
+      right: 10px;
+      height: 30px;
+      width: 1px;
+    }
+    
+    &--bottom {
+      bottom: 10px;
+      right: 20px;
+      height: 1px;
+      width: 30px;
+    }
+    
+    &--left {
+      bottom: 20px;
+      left: 10px;
+      height: 30px;
+      width: 1px;
+    }
+  }
+  
+  &__title {
+    font-family: vars.$font-heading;
+    color: vars.$electric-blue;
+    margin-bottom: vars.$spacing-3;
+  }
+  
+  &__content {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+/* Project card styles */
+.project-card {
+  position: relative;
+  height: 350px;
+  border-radius: 8px;
+  overflow: hidden;
+  
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform vars.$transition-slow;
+  }
+  
+  &__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(vars.$navy-blue, 0.9) 0%, rgba(vars.$navy-blue, 0.6) 50%, rgba(vars.$navy-blue, 0.3) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: vars.$spacing-4;
+    opacity: 0;
+    transition: opacity vars.$transition-base;
+  }
+  
+  &__title {
+    font-family: vars.$font-heading;
+    color: vars.$white;
+    margin-bottom: vars.$spacing-2;
+    transform: translateY(20px);
+    transition: transform vars.$transition-base;
+  }
+  
+  &__description {
+    color: vars.$light-gray;
+    margin-bottom: vars.$spacing-3;
+    transform: translateY(20px);
+    transition: transform vars.$transition-base 0.1s;
+  }
+  
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: vars.$spacing-2;
+    margin-bottom: vars.$spacing-3;
+    transform: translateY(20px);
+    transition: transform vars.$transition-base 0.2s;
+  }
+  
+  &__tag {
+    font-size: vars.$font-size-xs;
+    font-family: vars.$font-code;
+    color: vars.$navy-blue;
+    background-color: vars.$teal;
+    padding: 2px 8px;
+    border-radius: 3px;
+  }
+  
+  &__links {
+    display: flex;
+    gap: vars.$spacing-3;
+    transform: translateY(20px);
+    transition: transform vars.$transition-base 0.3s;
+  }
+  
+  &__link {
+    color: vars.$electric-blue;
+    transition: color vars.$transition-base;
+    
+    &:hover {
+      color: vars.$white;
+    }
+  }
+  
+  &:hover {
+    .project-card__image {
+      transform: scale(1.1);
+    }
+    
+    .project-card__overlay {
+      opacity: 1;
+    }
+    
+    .project-card__title,
+    .project-card__description,
+    .project-card__tags,
+    .project-card__links {
+      transform: translateY(0);
+    }
+  }
+}

@@ -1,0 +1,75 @@
+// Circuit theme color palette
+$navy-blue: #0a1942;
+$electric-blue: #00f0ff;
+$teal: #2de2e6;
+$white: #ffffff;
+$light-gray: #e0e0e0;
+$dark-gray: #333333;
+$red-accent: #ff3e3e;
+$glowing-blue: #4cc9f0;
+
+// Typography
+$font-heading: 'Space Grotesk', sans-serif;
+$font-body: 'Inter', sans-serif;
+$font-code: 'Fira Code', monospace;
+
+// Font sizes
+$font-size-xs: 0.75rem;   // 12px
+$font-size-sm: 0.875rem;  // 14px
+$font-size-base: 1rem;    // 16px
+$font-size-lg: 1.125rem;  // 18px
+$font-size-xl: 1.25rem;   // 20px
+$font-size-2xl: 1.5rem;   // 24px
+$font-size-3xl: 1.875rem; // 30px
+$font-size-4xl: 2.25rem;  // 36px
+$font-size-5xl: 3rem;     // 48px
+$font-size-6xl: 4rem;     // 64px
+
+// Spacing
+$spacing-1: 0.25rem;  // 4px
+$spacing-2: 0.5rem;   // 8px
+$spacing-3: 0.75rem;  // 12px
+$spacing-4: 1rem;     // 16px
+$spacing-5: 1.5rem;   // 24px
+$spacing-6: 2rem;     // 32px
+$spacing-8: 3rem;     // 48px
+$spacing-10: 4rem;    // 64px
+$spacing-12: 6rem;    // 96px
+$spacing-16: 8rem;    // 128px
+
+// Breakpoints
+$breakpoint-xs: 0;
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+$breakpoint-xxl: 1400px;
+
+// Z-index values
+$z-negative: -1;
+$z-elevate: 1;
+$z-dropdown: 1000;
+$z-sticky: 1020;
+$z-fixed: 1030;
+$z-modal-backdrop: 1040;
+$z-modal: 1050;
+$z-popover: 1060;
+$z-tooltip: 1070;
+
+// Transitions
+$transition-fast: 0.2s ease;
+$transition-base: 0.3s ease;
+$transition-slow: 0.5s ease;
+
+// Shadows
+$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+$shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+$shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1);
+$shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+// Circuit-specific variables
+$circuit-line-width: 2px;
+$circuit-node-size: 8px;
+$circuit-path-opacity: 0.7;
+$circuit-glow-intensity: 10px;
+$circuit-pulse-duration: 3s;

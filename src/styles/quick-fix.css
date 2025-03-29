@@ -1,0 +1,1154 @@
+/* src/styles/quick-fix.css */
+:root {
+    --navy-blue: #0a1942;
+    --electric-blue: #00f0ff;
+    --teal: #2de2e6;
+    --white: #ffffff;
+    --light-gray: #e0e0e0;
+  }
+  
+  body {
+    background-color: var(--navy-blue);
+    color: var(--white);
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .col-md-6 {
+    flex: 0 0 100%;
+    padding: 15px;
+  }
+  
+  @media (min-width: 768px) {
+    .col-md-6 {
+      flex: 0 0 50%;
+    }
+  }
+  
+  /* Header/Navigation */
+  .header {
+    padding: 20px 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    background-color: rgba(10, 25, 66, 0.9);
+  }
+  
+  .header__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .header__logo {
+    color: var(--white);
+    text-decoration: none;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .nav__list {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .nav__item {
+    margin: 0 15px;
+  }
+  
+  .nav__link {
+    color: var(--light-gray);
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .nav__link:hover,
+  .nav__link--active {
+    color: var(--electric-blue);
+  }
+  
+  .btn-primary {
+    background-color: var(--electric-blue);
+    color: var(--navy-blue);
+    padding: 12px 24px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-primary:hover {
+    background-color: #00d5e0;
+    transform: translateY(-3px);
+  }
+  
+  .btn-secondary {
+    background: transparent;
+    color: var(--electric-blue);
+    border: 1px solid var(--electric-blue);
+    padding: 12px 24px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-secondary:hover {
+    background-color: rgba(0, 240, 255, 0.1);
+  }
+  
+  /* Sections */
+  .section {
+    padding: 80px 0;
+    position: relative;
+  }
+  
+  .section-title {
+    color: var(--white);
+    font-size: 36px;
+    margin-bottom: 30px;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 10px;
+  }
+  
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--electric-blue), var(--teal), transparent);
+  }
+  
+  /* Footer */
+  .footer {
+    padding: 60px 0 30px;
+    background-color: rgba(10, 25, 66, 0.8);
+  }
+  
+  .footer__content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 40px;
+  }
+  
+  .footer__info {
+    flex: 0 0 100%;
+    max-width: 350px;
+  }
+  
+  @media (min-width: 768px) {
+    .footer__info {
+      flex: 0 0 30%;
+    }
+    
+    .footer__nav {
+      flex: 0 0 60%;
+    }
+  }
+  
+  .footer__logo {
+    color: var(--white);
+    font-size: 24px;
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 20px;
+  }
+  
+  .footer__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+  }
+  
+  .footer__nav-title {
+    color: var(--white);
+    margin-bottom: 20px;
+  }
+  
+  .footer__nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .footer__nav-link {
+    color: var(--light-gray);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 10px;
+    transition: color 0.3s ease;
+  }
+  
+  .footer__nav-link:hover {
+    color: var(--electric-blue);
+  }
+  
+  .footer__bottom {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .footer__social {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .footer__social-link {
+    color: var(--light-gray);
+    transition: color 0.3s ease;
+  }
+  
+  .footer__social-link:hover {
+    color: var(--electric-blue);
+  }
+
+  /* Add to your quick-fix.css */
+  
+  .circuit-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.1;
+  }
+  
+  
+  @keyframes blinkCursor {
+    from, to { border-color: transparent; }
+    50% { border-color: var(--electric-blue); }
+  }
+  
+  .btn-primary {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .btn-primary:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: 0.5s;
+  }
+  
+  .btn-primary:hover:after {
+    left: 100%;
+  }
+  
+  /* Circuit animation styles */
+  .section-title {
+    position: relative;
+  }
+  
+  .section-title:before {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background: var(--electric-blue);
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes pulse {
+    0% { opacity: 0.5; box-shadow: 0 0 5px var(--electric-blue); }
+    50% { opacity: 1; box-shadow: 0 0 15px var(--electric-blue); }
+    100% { opacity: 0.5; box-shadow: 0 0 5px var(--electric-blue); }
+  }
+  
+  .align-items-center {
+    align-items: center;
+  }
+
+  
+  /* Make section titles look more like circuit elements */
+  .section-title {
+    position: relative;
+    display: inline-block;
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+  }
+  
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--electric-blue), var(--teal), transparent);
+  }
+  
+  /* Enhance buttons with circuit styling */
+  .btn-primary, .btn-secondary {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+  }
+  
+  .btn-primary::before, .btn-secondary::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    width: 10px;
+    height: 10px;
+    background-color: var(--navy-blue);
+    border: 1px solid var(--electric-blue);
+    z-index: -1;
+  }
+  
+  .btn-primary::after, .btn-secondary::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: 10px;
+    height: 10px;
+    background-color: var(--navy-blue);
+    border: 1px solid var(--electric-blue);
+    z-index: -1;
+  }
+
+  /* Hero Section Layout Fixes */
+.hero-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    position: relative;
+  }
+  
+  .hero-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 2rem 0;
+  }
+  
+  /* Left side text content */
+  .hero-text {
+    flex: 0 0 50%;
+    padding-right: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  /* Right side visual content */
+  .hero-visual {
+    flex: 0 0 50%;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Text elements styling */
+  .hero-greeting {
+    font-size: 1.5rem;
+    color: var(--light-gray);
+    margin: 0 0 0.5rem 0;
+    font-weight: normal;
+  }
+  
+  .hero-name {
+    font-size: 3.5rem;
+    color: var(--white);
+    margin: 0 0 1rem 0;
+    font-weight: bold;
+  }
+  
+  .hero-title {
+    font-size: 2rem;
+    color: var(--electric-blue);
+    margin: 0 0 1rem 0;
+    font-weight: normal;
+    min-height: 2.5rem;
+    display: inline-block;
+    border-right: 3px solid var(--electric-blue);
+    padding-right: 0.5rem;
+    white-space: nowrap;
+    animation: blinkCursor 0.75s step-end infinite;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.1rem;
+    color: var(--light-gray);
+    margin: 0 0 2rem 0;
+    max-width: 450px;
+    line-height: 1.6;
+  }
+  
+  /* Button styling */
+  .hero-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+  
+  .btn-primary, .btn-secondary {
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+  }
+  
+  .btn-primary {
+    background-color: var(--electric-blue);
+    color: var(--navy-blue);
+    border: none;
+  }
+  
+  .btn-secondary {
+    background-color: transparent;
+    color: var(--electric-blue);
+    border: 1px solid var(--electric-blue);
+  }
+  
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 240, 255, 0.3);
+  }
+  
+  .btn-secondary:hover {
+    background-color: rgba(0, 240, 255, 0.1);
+  }
+  
+  /* Cursor blinking animation */
+  @keyframes blinkCursor {
+    0%, 100% { border-color: var(--electric-blue); }
+    50% { border-color: transparent; }
+  }
+  
+  /* Make it responsive */
+  @media (max-width: 768px) {
+    .hero-content {
+      flex-direction: column;
+      text-align: center;
+    }
+    
+    .hero-text {
+      flex: 0 0 100%;
+      padding-right: 0;
+      align-items: center;
+      order: 2;
+    }
+    
+    .hero-visual {
+      flex: 0 0 100%;
+      margin-bottom: 2rem;
+      order: 1;
+    }
+    
+    .hero-greeting {
+      font-size: 1.2rem;
+    }
+    
+    .hero-name {
+      font-size: 2.5rem;
+    }
+    
+    .hero-title {
+      font-size: 1.8rem;
+    }
+    
+    .hero-subtitle {
+      font-size: 1rem;
+    }
+  }
+
+  /* Add these to your quick-fix.css file */
+
+/* About Section Quick Fixes */
+.about-section, .projects-section {
+    padding: 80px 0;
+    position: relative;
+  }
+  
+  .about-section .section-title, .projects-section .section-title {
+    color: var(--white);
+    font-size: 36px;
+    margin-bottom: 40px;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 10px;
+  }
+  
+  .about-section .container, .projects-section .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  /* Bio Component */
+  .bio-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    position: relative;
+  }
+  
+  @media (max-width: 768px) {
+    .bio-container {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  .bio-container .bio-content h3 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: var(--electric-blue);
+  }
+  
+  .bio-container .bio-content p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  
+  /* Timeline Component */
+  .timeline-container {
+    position: relative;
+    margin-top: 80px;
+  }
+  
+  .timeline-container h3 {
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+    color: var(--electric-blue);
+  }
+  
+  .timeline-item {
+    position: relative;
+    margin-bottom: 50px;
+    padding-left: 30px;
+  }
+  
+  .timeline-item .timeline-content {
+    background-color: rgba(10, 25, 66, 0.7);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid var(--electric-blue);
+  }
+  
+  .timeline-item.education .timeline-content {
+    border-left-color: #2ecc71;
+  }
+  
+  .timeline-item.experience .timeline-content {
+    border-left-color: #e74c3c;
+  }
+  
+  /* Interests Component */
+  .interests-container {
+    margin-top: 80px;
+  }
+  
+  .interests-container h3 {
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+    color: var(--electric-blue);
+  }
+  
+  .interests-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 30px;
+  }
+  
+  .interest-item {
+    background-color: rgba(10, 25, 66, 0.7);
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .interest-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Projects Section Quick Fixes */
+  .project-filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 40px;
+  }
+  
+  .filter-btn {
+    padding: 8px 16px;
+    background-color: transparent;
+    border: 1px solid var(--light-gray);
+    border-radius: 20px;
+    color: var(--light-gray);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .filter-btn:hover, .filter-btn.active {
+    background-color: var(--electric-blue);
+    color: var(--navy-blue);
+    border-color: var(--electric-blue);
+  }
+  
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+  }
+  
+  .project-card {
+    background-color: rgba(10, 25, 66, 0.7);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    height: 100%;
+  }
+  
+  .project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  }
+  
+  .project-card.featured {
+    grid-column: span 2;
+  }
+  
+  @media (max-width: 768px) {
+    .project-card.featured {
+      grid-column: span 1;
+    }
+  }
+  
+  .tech-tag {
+    padding: 4px 10px;
+    background-color: rgba(0, 240, 255, 0.1);
+    border-radius: 4px;
+    font-size: 0.8rem;
+    color: var(--electric-blue);
+    display: inline-block;
+    margin-right: 5px;
+    margin-bottom: 5px;
+  }
+  
+  /* Project Modal */
+  .project-modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+  }
+  
+  .modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 900px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background-color: var(--navy-blue);
+    border-radius: 10px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
+  }
+  
+  .modal-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    color: var(--white);
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 1002;
+  }
+  
+  .modal-header {
+    padding: 25px 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .modal-body {
+    padding: 30px;
+  }
+  
+  .modal-footer {
+    padding: 20px 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* Add these to your existing quick-fix.css file */
+
+/* Fix for header overlap issues */
+section {
+    scroll-margin-top: 80px; /* Adjust to match your header height */
+    padding-top: 100px; /* Add padding to prevent content from being too close to the top */
+    margin-top: -80px; /* Offset the padding to maintain visual spacing */
+  }
+  
+  /* Add proper spacing to section titles */
+  .section-title {
+    margin-top: 20px;
+  }
+  
+  /* Fix project card alignment */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+  }
+  
+  @media (max-width: 992px) {
+    .projects-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .projects-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  /* Fix for featured projects */
+  .project-card.featured {
+    grid-column: span 2;
+  }
+  
+  @media (max-width: 992px) {
+    .project-card.featured {
+      grid-column: span 1;
+    }
+  }
+  
+  /* Improve project card styles */
+  .project-card {
+    background-color: rgba(10, 25, 66, 0.95) !important;
+    border: 1px solid rgba(0, 240, 255, 0.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Fix modal background and readability */
+  .modal-content {
+    background-color: #0a1942 !important; /* solid navy blue */
+    border: 1px solid rgba(0, 240, 255, 0.3);
+  }
+  
+  .modal-header {
+    padding-top: 25px;
+  }
+  
+  .modal-body p, .modal-body h3, .modal-body h4, .modal-body h5 {
+    color: #ffffff;
+  }
+  
+  /* Fix modal text contrast */
+  .project-description, .timeline-description, .timeline-content p {
+    color: #e0e0e0 !important;
+  }
+  
+  /* Additional styles for the timeline component */
+  .timeline-item .timeline-content {
+    background-color: rgba(10, 25, 66, 0.95) !important;
+    border: 1px solid rgba(0, 240, 255, 0.1);
+  }
+  
+  /* Improve interests card readability */
+  .interest-item {
+    background-color: rgba(10, 25, 66, 0.95) !important;
+    border: 1px solid rgba(0, 240, 255, 0.1);
+  }
+  
+  /* Fix modal position for header overlap */
+  .project-modal-container .modal-content {
+    margin-top: 40px;
+  }
+
+  /* Quick fixes for circuit component warnings */
+
+/* Fix for node pulse animation */
+.node-pulse {
+    animation: nodePulse 2s infinite ease-in-out;
+  }
+  
+  @keyframes nodePulse {
+    0% {
+      transform: scale(1);
+      opacity: 0.7;
+    }
+    50% {
+      transform: scale(1.5);
+      opacity: 0.3;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 0.7;
+    }
+  }
+  
+  /* Fix for path illumination */
+  .circuit-path {
+    position: absolute;
+    z-index: 1;
+  }
+  
+  /* Add these styles for specific circuit elements */
+  .timeline-main-path {
+    stroke-dasharray: 1000;
+  }
+  
+  .timeline-connector {
+    stroke-dasharray: 20;
+  }
+  
+  .bio-circuit-path {
+    stroke-dasharray: 1000;
+  }
+  
+  .interest-circuit-path {
+    stroke-dasharray: 50;
+  }
+  
+  .card-circuit-path {
+    transition: stroke-dashoffset 0.5s ease;
+  }
+  
+  /* General fixes for SVG positioning */
+  .circuit-node, .circuit-path {
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Fix for modal circuit elements */
+  .modal-circuit-path {
+    opacity: 0.6;
+  }
+
+  /* Quick fix for skills graph */
+
+/* Circuit Graph Container */
+.skill-circuit-graph {
+    position: relative;
+    width: 100%;
+    height: 300px !important; /* Ensure height */
+    margin: 30px 0 50px;
+    background-color: rgba(10, 25, 66, 0.7) !important;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 240, 255, 0.1);
+    overflow: visible !important; /* Allow nodes to be visible outside container */
+  }
+  
+  /* Grid with dots */
+  .circuit-grid {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(circle, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+  
+  /* Central Skills Node */
+  .central-node {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 40px !important;
+    height: 40px !important;
+    background-color: #f1c40f !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 0 15px rgba(241, 196, 15, 0.8) !important;
+    z-index: 10 !important;
+  }
+  
+  .central-node span {
+    font-size: 10px !important;
+    color: #0a1942 !important;
+    font-weight: bold !important;
+  }
+  
+  /* Skill Nodes */
+  .skill-node {
+    position: absolute !important;
+    width: 16px !important;
+    height: 16px !important;
+    border-radius: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    z-index: 5 !important;
+  }
+  
+  /* Skill Node Content (Tooltip) */
+  .skill-node .node-content {
+    position: absolute !important;
+    top: -45px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    background-color: #0a1942 !important;
+    border: 1px solid currentColor !important;
+    border-radius: 5px !important;
+    padding: 5px 10px !important;
+    min-width: 100px !important;
+    text-align: center !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: opacity 0.3s !important;
+    pointer-events: none !important;
+    z-index: 50 !important;
+  }
+  
+  .skill-node:hover .node-content {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+  
+  .skill-node .node-content .node-name {
+    display: block !important;
+    font-size: 12px !important;
+    color: white !important;
+    margin-bottom: 2px !important;
+    white-space: nowrap !important;
+  }
+  
+  .skill-node .node-content .node-level {
+    display: block !important;
+    font-size: 11px !important;
+    color: #00f0ff !important;
+  }
+  
+  /* Node Connector Lines */
+  .node-connector {
+    position: absolute !important;
+    z-index: 1 !important;
+    opacity: 0.7 !important;
+  }
+
+  /* Emergency fix for skills section */
+
+/* Circuit Graph */
+.skill-circuit-graph {
+    position: relative !important;
+    width: 100% !important;
+    height: 350px !important;
+    margin: 40px 0 60px !important;
+    background-color: rgba(10, 25, 66, 0.7) !important;
+    border-radius: 10px !important;
+    border: 1px solid rgba(0, 240, 255, 0.1) !important;
+    overflow: visible !important; /* Allow nodes to show outside */
+  }
+  
+  .circuit-grid {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+    background-image: radial-gradient(circle, rgba(0, 240, 255, 0.05) 1px, transparent 1px) !important;
+    background-size: 20px 20px !important;
+  }
+  
+  .node-positions {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 2 !important;
+  }
+  
+  .skill-node {
+    position: absolute !important;
+    width: 16px !important;
+    height: 16px !important;
+    border-radius: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    box-shadow: 0 0 10px currentColor !important;
+    z-index: 5 !important;
+    opacity: 1 !important;
+  }
+  
+  .skill-node:hover .node-content {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+  
+  .central-node {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 50px !important;
+    height: 50px !important;
+    background-color: #f1c40f !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 0 15px rgba(241, 196, 15, 0.8) !important;
+    z-index: 10 !important;
+  }
+  
+  /* Fix skill category alignment */
+  .skills-categories {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)) !important;
+    gap: 30px !important;
+    margin-bottom: 40px !important;
+  }
+  
+  .skill-category {
+    background-color: rgba(10, 25, 66, 0.95) !important;
+    border-radius: 10px !important;
+    padding: 20px !important;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
+    border: 1px solid rgba(0, 240, 255, 0.1) !important;
+    overflow: hidden !important;
+    height: auto !important; /* Let it expand as needed */
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  
+  .category-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    margin-bottom: 20px !important;
+    border-bottom: 1px solid rgba(0, 240, 255, 0.1) !important;
+    padding-bottom: 10px !important;
+  }
+  
+  .category-header h3 {
+    font-size: 1.4rem !important;
+    margin: 0 !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+  }
+  
+  .skills-list {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 15px !important;
+    width: 100% !important; /* Full width */
+  }
+  
+  .skill-item {
+    margin-bottom: 10px !important;
+    width: 100% !important; /* Full width */
+  }
+  
+  .skill-info {
+    display: flex !important;
+    justify-content: space-between !important;
+    margin-bottom: 5px !important;
+    width: 100% !important; /* Full width */
+  }
+  
+  .skill-name {
+    font-size: 0.95rem !important;
+    color: #ffffff !important;
+  }
+  
+  .skill-level {
+    font-size: 0.85rem !important;
+    color: #cccccc !important;
+    font-family: monospace !important;
+  }
+  
+  .skill-bar-container {
+    height: 8px !important;
+    background-color: rgba(10, 25, 66, 0.7) !important;
+    border-radius: 4px !important;
+    overflow: hidden !important;
+    position: relative !important;
+    width: 100% !important;
+    margin-bottom: 5px !important;
+  }
+  
+  .skill-bar {
+    height: 100% !important;
+    border-radius: 4px !important;
+    transition: width 0.8s ease !important;
+    position: relative !important;
+  }
+  
+  /* Add pulse animation to central node */
+  @keyframes pulse {
+    0% {
+      transform: translate(-50%, -50%) scale(1);
+      box-shadow: 0 0 10px #f1c40f;
+    }
+    50% {
+      transform: translate(-50%, -50%) scale(1.05);
+      box-shadow: 0 0 20px #f1c40f;
+    }
+    100% {
+      transform: translate(-50%, -50%) scale(1);
+      box-shadow: 0 0 10px #f1c40f;
+    }
+  }
+  
+  .central-node {
+    animation: pulse 2s infinite ease-in-out !important;
+  }

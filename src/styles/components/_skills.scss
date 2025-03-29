@@ -1,0 +1,305 @@
+// Enhanced Skills Section Styles
+@use '../base/variables' as *;
+@use 'sass:color';
+
+// Circuit Graph Animations
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 10px #f1c40f;
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px #f1c40f;
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 10px #f1c40f;
+  }
+}
+
+@keyframes nodePulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 0.3;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.7;
+  }
+}
+
+@keyframes pathAppear {
+  from {
+    stroke-dashoffset: 30;
+    opacity: 0;
+  }
+  to {
+    stroke-dashoffset: 0;
+    opacity: 0.7;
+  }
+}
+
+@keyframes nodeAppear {
+  from {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes dataFlow {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(
+      calc(-50% + var(--radius) * cos(var(--angle))), 
+      calc(-50% + var(--radius) * sin(var(--angle)))
+    ) scale(0);
+    opacity: 0;
+  }
+}
+
+// Enhanced Skill Circuit Graph
+.skill-circuit-graph {
+  position: relative;
+  width: 100%;
+  height: 350px;
+  margin: 40px 0 60px;
+  background-color: rgba(10, 25, 66, 0.7);
+  border-radius: 10px;
+  border: 1px solid rgba(0, 240, 255, 0.1);
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+      circle at center,
+      rgba(0, 240, 255, 0.05) 0%,
+      rgba(10, 25, 66, 0) 70%
+    );
+    z-index: 1;
+  }
+  
+  .circuit-grid {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+  }
+  
+  // SVG connector styles
+  .connector-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+  }
+  
+  .connector-path {
+    stroke-dasharray: 30;
+    stroke-dashoffset: 30;
+    opacity: 0;
+    
+    &.appear {
+      animation: pathAppear 1.5s forwards ease-in-out;
+    }
+  }
+  
+  // Central node
+  .central-node {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 50px;
+    background-color: #f1c40f;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    
+    &.pulse {
+      animation: pulse 2s infinite ease-in-out;
+    }
+    
+    span {
+      font-size: 12px;
+      color: #0a1942;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .node-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: radial-gradient(
+        circle at center,
+        rgba(241, 196, 15, 0.8) 0%,
+        rgba(241, 196, 15, 0) 70%
+      );
+      z-index: -1;
+    }
+  }
+  
+  // Data flow particles
+  .data-flows {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    pointer-events: none;
+  }
+  
+  .data-particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background-color: var(--color);
+    border-radius: 50%;
+    opacity: 0;
+    z-index: 3;
+    filter: blur(1px);
+    animation: dataFlow 3s infinite ease-out;
+  }
+  
+  // Skill nodes
+  .skill-node {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    z-index: 5;
+    opacity: 0;
+    
+    &.appear {
+      animation: nodeAppear 0.5s forwards ease-out;
+    }
+    
+    &:hover {
+      z-index: 20;
+      
+      .node-content {
+        opacity: 1;
+        visibility: visible;
+        transform: translate(-50%, -110%);
+      }
+    }
+    
+    .node-pulse {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(1);
+      width: 200%;
+      height: 200%;
+      border: 2px solid;
+      border-radius: 50%;
+      opacity: 0.7;
+      animation: nodePulse 3s infinite ease-in-out;
+    }
+    
+    .node-content {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translate(-50%, -90%);
+      background-color: rgba(10, 25, 66, 0.9);
+      border: 1px solid currentColor;
+      border-radius: 6px;
+      padding: 8px 12px;
+      min-width: 120px;
+      text-align: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      pointer-events: none;
+      z-index: 30;
+      
+      &::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border-width: 6px;
+        border-style: solid;
+        border-color: rgba(10, 25, 66, 0.9) transparent transparent transparent;
+      }
+      
+      .node-name {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        color: white;
+        margin-bottom: 4px;
+        white-space: nowrap;
+      }
+      
+      .node-level {
+        display: block;
+        font-size: 12px;
+        color: var(--electric-blue, #00f0ff);
+        font-family: var(--font-code, monospace);
+      }
+    }
+  }
+  
+  @media (max-width: 768px) {
+    height: 300px;
+    
+    .central-node {
+      width: 40px;
+      height: 40px;
+      
+      span {
+        font-size: 10px;
+      }
+    }
+    
+    .skill-node {
+      width: 12px;
+      height: 12px;
+      
+      .node-content {
+        min-width: 100px;
+        padding: 6px 10px;
+        
+        .node-name {
+          font-size: 12px;
+        }
+        
+        .node-level {
+          font-size: 10px;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,177 @@
+@use 'sass:math';
+@use '../base/variables' as vars;
+
+/* Grid container */
+.container {
+  width: 100%;
+  padding-right: vars.$spacing-4;
+  padding-left: vars.$spacing-4;
+  margin-right: auto;
+  margin-left: auto;
+  
+  @media (min-width: vars.$breakpoint-sm) {
+    max-width: 540px;
+  }
+  
+  @media (min-width: vars.$breakpoint-md) {
+    max-width: 720px;
+  }
+  
+  @media (min-width: vars.$breakpoint-lg) {
+    max-width: 960px;
+  }
+  
+  @media (min-width: vars.$breakpoint-xl) {
+    max-width: 1140px;
+  }
+  
+  @media (min-width: vars.$breakpoint-xxl) {
+    max-width: 1320px;
+  }
+}
+
+.container-fluid {
+  width: 100%;
+  padding-right: vars.$spacing-4;
+  padding-left: vars.$spacing-4;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+/* Grid system */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  /* FIX: Using interpolation for negative values */
+  margin-right: -#{vars.$spacing-2};
+  margin-left: -#{vars.$spacing-2};
+}
+
+/* Column classes */
+@mixin make-col($size, $columns: 12) {
+  flex: 0 0 auto;
+  width: math.percentage(math.div($size, $columns));
+}
+
+// xs columns (default)
+@for $i from 1 through 12 {
+  .col-#{$i} {
+    @include make-col($i);
+    padding-right: vars.$spacing-2;
+    padding-left: vars.$spacing-2;
+  }
+}
+
+// sm columns
+@media (min-width: vars.$breakpoint-sm) {
+  @for $i from 1 through 12 {
+    .col-sm-#{$i} {
+      @include make-col($i);
+      padding-right: vars.$spacing-2;
+      padding-left: vars.$spacing-2;
+    }
+  }
+}
+
+// md columns
+@media (min-width: vars.$breakpoint-md) {
+  @for $i from 1 through 12 {
+    .col-md-#{$i} {
+      @include make-col($i);
+      padding-right: vars.$spacing-2;
+      padding-left: vars.$spacing-2;
+    }
+  }
+}
+
+// lg columns
+@media (min-width: vars.$breakpoint-lg) {
+  @for $i from 1 through 12 {
+    .col-lg-#{$i} {
+      @include make-col($i);
+      padding-right: vars.$spacing-2;
+      padding-left: vars.$spacing-2;
+    }
+  }
+}
+
+// xl columns
+@media (min-width: vars.$breakpoint-xl) {
+  @for $i from 1 through 12 {
+    .col-xl-#{$i} {
+      @include make-col($i);
+      padding-right: vars.$spacing-2;
+      padding-left: vars.$spacing-2;
+    }
+  }
+}
+
+/* Flex utilities */
+.d-flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.justify-content-start {
+  justify-content: flex-start;
+}
+
+.justify-content-center {
+  justify-content: center;
+}
+
+.justify-content-end {
+  justify-content: flex-end;
+}
+
+.justify-content-between {
+  justify-content: space-between;
+}
+
+.justify-content-around {
+  justify-content: space-around;
+}
+
+.align-items-start {
+  align-items: flex-start;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.align-items-end {
+  align-items: flex-end;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-nowrap {
+  flex-wrap: nowrap;
+}
+
+/* Gap utilities */
+.gap-1 {
+  gap: vars.$spacing-1;
+}
+
+.gap-2 {
+  gap: vars.$spacing-2;
+}
+
+.gap-3 {
+  gap: vars.$spacing-3;
+}
+
+.gap-4 {
+  gap: vars.$spacing-4;
+}
+
+.gap-5 {
+  gap: vars.$spacing-5;
+}

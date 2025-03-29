@@ -1,0 +1,125 @@
+.circuit-node {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform: scale(1);
+    opacity: 1;
+    
+    &:hover {
+      transform: scale(1.15);
+      z-index: 5;
+      
+      .node-label {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      
+      .node-core {
+        transform: scale(1.1);
+      }
+      
+      .node-outer {
+        filter: blur(2px);
+      }
+    }
+    
+    .node-outer {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 1px solid currentColor;
+      filter: blur(1px);
+      transition: all 0.3s ease;
+    }
+    
+    .node-inner {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.2), 
+                  inset 0 0 4px rgba(255, 255, 255, 0.5);
+      transition: all 0.3s ease;
+    }
+    
+    .node-core {
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+    
+    .node-pulse {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      opacity: 0;
+      animation: node-pulse 2s infinite ease-out;
+    }
+    
+    .node-label {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(6px);
+      white-space: nowrap;
+      font-size: 0.75rem;
+      color: var(--color-text-light, #8892b0);
+      font-family: var(--font-mono, 'Fira Code', monospace);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+      background-color: rgba(var(--color-background-rgb, 10, 25, 47), 0.7);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      opacity: 0;
+      transform: translateX(-50%) translateY(10px);
+      transition: all 0.3s ease;
+      pointer-events: none;
+      z-index: 2;
+    }
+    
+    // Different animation timing for nodes to create organic feeling
+    &:nth-child(3n) .node-pulse {
+      animation-delay: 0.5s;
+    }
+    
+    &:nth-child(3n+1) .node-pulse {
+      animation-delay: 1s;
+    }
+    
+    &:nth-child(3n+2) .node-pulse {
+      animation-delay: 1.5s;
+    }
+  }
+  
+  // Pulse animation
+  @keyframes node-pulse {
+    0% {
+      transform: scale(0.95);
+      opacity: 0.7;
+    }
+    100% {
+      transform: scale(1.8);
+      opacity: 0;
+    }
+  }
+  
+  // Blink animation for decoration nodes
+  .decoration-node .node-core {
+    animation: core-blink 4s infinite alternate;
+  }
+  
+  @keyframes core-blink {
+    0%, 80% {
+      opacity: 0.7;
+      transform: scale(1);
+    }
+    90%, 100% {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+  }
