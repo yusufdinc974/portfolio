@@ -1,236 +1,419 @@
 // src/sections/hero/HeroAnimation.jsx
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
 
 const HeroAnimation = () => {
   const containerRef = useRef(null);
+  const cpuRef = useRef(null);
+  const pathRefs = useRef([]);
+  const packetRefs = useRef([]);
+  const [hoveredElement, setHoveredElement] = useState(null);
+  const timelineRef = useRef(null);
   
+  // Reset refs on each render
+  pathRefs.current = [];
+  packetRefs.current = [];
+  
+  // Helper to add refs to arrays
+  const addPathRef = (el) => el && pathRefs.current.push(el);
+  const addPacketRef = (el) => el && packetRefs.current.push(el);
+  
+  // Create paths that connect to the CPU
+  const circuitPaths = [
+    // Left side paths - connect to exact corners
+    { id: "path-left-1", d: "M0,190 H180 V220 H210", animDelay: 0.2 },
+    { id: "path-left-2", d: "M0,240 H170 V260 H210", animDelay: 0.6 },
+    { id: "path-left-3", d: "M0,280 H190 V270 H210", animDelay: 0.4 },
+    
+    // Right side paths - connect to exact corners
+    { id: "path-right-1", d: "M500,190 H320 V220 H290", animDelay: 0.3 },
+    { id: "path-right-2", d: "M500,240 H330 V260 H290", animDelay: 0.7 },
+    { id: "path-right-3", d: "M500,280 H310 V270 H290", animDelay: 0.5 },
+    
+    // Top paths - symmetrically positioned
+    { id: "path-top-1", d: "M225,0 V120 H225 V210", animDelay: 0.2 },
+    { id: "path-top-2", d: "M250,0 V100 H250 V210", animDelay: 0.6 },
+    { id: "path-top-3", d: "M275,0 V80 H275 V210", animDelay: 0.4 },
+    
+    // Bottom paths - symmetrically positioned
+    { id: "path-bottom-1", d: "M225,500 V360 H225 V290", animDelay: 0.3 },
+    { id: "path-bottom-2", d: "M250,500 V380 H250 V290", animDelay: 0.5 },
+    { id: "path-bottom-3", d: "M275,500 V350 H275 V290", animDelay: 0.7 }
+  ];
+  
+  // Data packets that flow along the traces
+  const dataPackets = [
+    { pathId: "path-left-1", size: 4, color: "#ffffff", speed: 3 },
+    { pathId: "path-right-1", size: 4, color: "#ffffff", speed: 4 },
+    { pathId: "path-top-2", size: 4, color: "#ffffff", speed: 5 },
+    { pathId: "path-bottom-2", size: 4, color: "#ffffff", speed: 3.5 }
+  ];
+  
+  // CPU grid pattern - for the inner grid of the CPU
+  const gridLines = [];
+  // Use the exact center for calculations
+  const cpuLeft = 250 - 40; // center - half width
+  const cpuRight = 250 + 40; // center + half width
+  
+  for (let i = 0; i < 3; i++) {
+    // Horizontal grid lines
+    gridLines.push({
+      id: `h-grid-${i}`,
+      d: `M${cpuLeft},${210 + i * 20} H${cpuRight}`,
+      strokeWidth: 1,
+      color: "rgba(0, 240, 255, 0.5)"
+    });
+    
+    // Vertical grid lines - evenly spaced within CPU
+    gridLines.push({
+      id: `v-grid-${i}`,
+      d: `M${cpuLeft + 20 + i * 20},210 V290`,
+      strokeWidth: 1,
+      color: "rgba(0, 240, 255, 0.5)"
+    });
+  }
+  
+  // Handle CPU hover effect
+  const handleCpuHover = (isHovering) => {
+    if (isHovering) {
+      setHoveredElement('cpu');
+      gsap.to(cpuRef.current, { 
+        boxShadow: '0 0 15px rgba(0, 240, 255, 0.8)',
+        backgroundColor: 'rgba(0, 240, 255, 0.15)',
+        duration: 0.3 
+      });
+      gsap.to('.cpu-corner', { opacity: 0.9, duration: 0.3 });
+      
+      // Make all connected paths glow
+      pathRefs.current.forEach(path => {
+        gsap.to(path, { 
+          stroke: '#00ffff', 
+          strokeWidth: 2.5, 
+          filter: 'drop-shadow(0 0 8px rgba(0, 255, 255, 0.8))',
+          duration: 0.3 
+        });
+      });
+    } else {
+      setHoveredElement(null);
+      gsap.to(cpuRef.current, { 
+        boxShadow: '0 0 10px rgba(0, 240, 255, 0.5)',
+        backgroundColor: 'rgba(0, 240, 255, 0.08)',
+        duration: 0.3 
+      });
+      gsap.to('.cpu-corner', { opacity: 0.7, duration: 0.3 });
+      
+      // Reset path styling
+      pathRefs.current.forEach(path => {
+        gsap.to(path, { 
+          stroke: '#00f0ff', 
+          strokeWidth: 2, 
+          filter: 'drop-shadow(0 0 3px rgba(0, 240, 255, 0.5))',
+          duration: 0.3 
+        });
+      });
+    }
+  };
+  
+  // Initialize animation when component mounts
   useEffect(() => {
     if (!containerRef.current) return;
     
-    const container = containerRef.current;
+    // Create the main animation timeline
+    const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
+    timelineRef.current = tl;
     
-    // Clear previous content
-    container.innerHTML = '';
+    // Initialize CPU with scale 0
+    tl.set(cpuRef.current, { scale: 0, opacity: 0 });
     
-    // Create SVG element
-    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.setAttribute('width', '100%');
-    svg.setAttribute('height', '100%');
-    svg.setAttribute('viewBox', '0 0 400 400');
-    svg.style.display = 'block';
+    // Initialize all paths with dash offset
+    pathRefs.current.forEach(path => {
+      const length = path.getTotalLength ? path.getTotalLength() : 1000;
+      gsap.set(path, { 
+        strokeDasharray: length,
+        strokeDashoffset: length
+      });
+    });
     
-    // Create CPU/Microprocessor
-    const cpu = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-    cpu.setAttribute('x', '150');
-    cpu.setAttribute('y', '150');
-    cpu.setAttribute('width', '100');
-    cpu.setAttribute('height', '100');
-    cpu.setAttribute('rx', '5');
-    cpu.setAttribute('fill', 'rgba(0, 240, 255, 0.1)');
-    cpu.setAttribute('stroke', '#00f0ff');
-    cpu.setAttribute('stroke-width', '2');
-    cpu.setAttribute('class', 'circuit-cpu');
+    // Initialize all packets as invisible
+    packetRefs.current.forEach(packet => {
+      gsap.set(packet, { opacity: 0 });
+    });
     
-    // Create CPU inner details
-    const cpuInner = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    // Animate CPU appearing
+    tl.to(cpuRef.current, { 
+      scale: 1, 
+      opacity: 1, 
+      duration: 0.8, 
+      ease: "elastic.out(1, 0.5)" 
+    });
     
-    // Add grid lines inside CPU
-    for (let i = 0; i < 3; i++) {
-      const hLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      hLine.setAttribute('x1', '155');
-      hLine.setAttribute('y1', (170 + i * 30).toString());
-      hLine.setAttribute('x2', '245');
-      hLine.setAttribute('y2', (170 + i * 30).toString());
-      hLine.setAttribute('stroke', '#00f0ff');
-      hLine.setAttribute('stroke-width', '1');
-      hLine.setAttribute('opacity', '0.7');
-      cpuInner.appendChild(hLine);
-      
-      const vLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      vLine.setAttribute('x1', (170 + i * 30).toString());
-      vLine.setAttribute('y1', '155');
-      vLine.setAttribute('x2', (170 + i * 30).toString());
-      vLine.setAttribute('y2', '245');
-      vLine.setAttribute('stroke', '#00f0ff');
-      vLine.setAttribute('stroke-width', '1');
-      vLine.setAttribute('opacity', '0.7');
-      cpuInner.appendChild(vLine);
-    }
+    // Animate grid lines appearing (staggered)
+    tl.to('.grid-line', { 
+      opacity: 0.7, 
+      duration: 0.5, 
+      stagger: 0.05 
+    }, "-=0.4");
     
-    // Create circuit traces
-    const createCircuitTraces = () => {
-      const traces = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-      traces.setAttribute('class', 'circuit-traces');
-      
-      // Add paths connecting to CPU
-      const paths = [
-        // Left side paths
-        { x1: 0, y1: 130, x2: 150, y2: 170 },
-        { x1: 0, y1: 180, x2: 150, y2: 200 },
-        { x1: 0, y1: 230, x2: 150, y2: 230 },
+    // Animate CPU corners
+    tl.to('.cpu-corner', { 
+      scale: 1, 
+      opacity: 0.7, 
+      duration: 0.5, 
+      stagger: 0.1 
+    }, "-=0.3");
+    
+    // Animate paths drawing in (staggered by their delay values)
+    circuitPaths.forEach((path, index) => {
+      const pathElement = document.getElementById(path.id);
+      if (pathElement && pathElement.getTotalLength) {
+        const length = pathElement.getTotalLength();
+        tl.to(pathElement, { 
+          strokeDashoffset: 0, 
+          duration: 1.2, 
+          ease: "power2.inOut" 
+        }, 0.7 + path.animDelay);
+      }
+    });
+    
+    // Animate data packets
+    setTimeout(() => {
+      packetRefs.current.forEach((packet, index) => {
+        const speed = dataPackets[index].speed;
+        const pathElement = document.getElementById(dataPackets[index].pathId);
         
-        // Right side paths
-        { x1: 400, y1: 150, x2: 250, y2: 180 },
-        { x1: 400, y1: 200, x2: 250, y2: 210 },
-        { x1: 400, y1: 250, x2: 250, y2: 240 },
-        
-        // Top paths
-        { x1: 130, y1: 0, x2: 170, y2: 150 },
-        { x1: 200, y1: 0, x2: 200, y2: 150 },
-        { x1: 270, y1: 0, x2: 230, y2: 150 },
-        
-        // Bottom paths
-        { x1: 160, y1: 400, x2: 180, y2: 250 },
-        { x1: 230, y1: 400, x2: 220, y2: 250 }
-      ];
-      
-      paths.forEach((path, index) => {
-        const trace = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        
-        // Create corner paths with horizontal then vertical lines
-        let d;
-        if (path.x1 < path.x2 && path.y1 !== path.y2) { // Left to right
-          const mid = path.x1 + (path.x2 - path.x1) * 0.7;
-          d = `M${path.x1},${path.y1} H${mid} V${path.y2} H${path.x2}`;
-        } else if (path.x1 > path.x2 && path.y1 !== path.y2) { // Right to left
-          const mid = path.x1 - (path.x1 - path.x2) * 0.7;
-          d = `M${path.x1},${path.y1} H${mid} V${path.y2} H${path.x2}`;
-        } else if (path.y1 < path.y2) { // Top to bottom
-          const mid = path.y1 + (path.y2 - path.y1) * 0.7;
-          d = `M${path.x1},${path.y1} V${mid} H${path.x2} V${path.y2}`;
-        } else { // Bottom to top
-          const mid = path.y1 - (path.y1 - path.y2) * 0.7;
-          d = `M${path.x1},${path.y1} V${mid} H${path.x2} V${path.y2}`;
-        }
-        
-        trace.setAttribute('d', d);
-        trace.setAttribute('fill', 'none');
-        trace.setAttribute('stroke', '#00f0ff');
-        trace.setAttribute('stroke-width', '2');
-        trace.setAttribute('stroke-opacity', '0.8');
-        trace.setAttribute('class', `circuit-trace trace-${index}`);
-        
-        // Animation properties for each path
-        const length = 1000; // Approximate path length
-        trace.style.strokeDasharray = length;
-        trace.style.strokeDashoffset = length;
-        trace.style.animation = `circuit-trace-reveal 2s forwards ${index * 0.2}s ease-out`;
-        
-        traces.appendChild(trace);
-        
-        // Add nodes at some trace intersections
-        if (index % 2 === 0) {
-          const node = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-          node.setAttribute('cx', path.x2);
-          node.setAttribute('cy', path.y2);
-          node.setAttribute('r', '4');
-          node.setAttribute('fill', '#2de2e6');
-          node.setAttribute('class', `circuit-node node-${index}`);
-          traces.appendChild(node);
+        if (pathElement && pathElement.getTotalLength) {
+          const pathLength = pathElement.getTotalLength();
+          const path = MorphSVGPlugin ? MorphSVGPlugin.pathDataToBezier(pathElement.getAttribute('d')) : null;
+          
+          if (path) {
+            // Animate along SVG path if MorphSVGPlugin available
+            gsap.to(packet, { 
+              opacity: 1, 
+              duration: 0.5 
+            });
+            
+            gsap.to(packet, { 
+              motionPath: { 
+                path: pathElement.getAttribute('d'),
+                align: pathElement,
+                alignOrigin: [0.5, 0.5],
+                autoRotate: true
+              },
+              duration: speed,
+              repeat: -1,
+              ease: "none"
+            });
+          } else {
+            // Fallback animation if MorphSVGPlugin not available
+            gsap.set(packet, { 
+              opacity: 1,
+              x: 0,
+              y: 0
+            });
+            
+            // Find start and end points from the path
+            const startPoint = circuitPaths.find(p => p.id === dataPackets[index].pathId)?.d.split(' ')[0].replace('M', '').split(',');
+            const endSegments = circuitPaths.find(p => p.id === dataPackets[index].pathId)?.d.split(' ');
+            const endPoint = endSegments[endSegments.length - 1].split(',');
+            
+            if (startPoint && startPoint.length === 2 && endPoint && endPoint.length === 2) {
+              gsap.fromTo(packet, 
+                { 
+                  x: parseFloat(startPoint[0]), 
+                  y: parseFloat(startPoint[1]) 
+                },
+                { 
+                  x: parseFloat(endPoint[0]), 
+                  y: parseFloat(endPoint[1]),
+                  duration: speed,
+                  repeat: -1,
+                  ease: "none"
+                }
+              );
+            }
+          }
         }
       });
-      
-      return traces;
-    };
+    }, 2500);
     
-    // Add data packets that flow along the traces
-    const createDataPackets = () => {
-      const packets = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-      packets.setAttribute('class', 'data-packets');
-      
-      // Add a few data packets on select paths
-      const packetPaths = [0, 3, 6, 9];
-      
-      packetPaths.forEach((pathIndex) => {
-        const packet = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-        packet.setAttribute('r', '3');
-        packet.setAttribute('fill', '#ffffff');
-        packet.setAttribute('class', `data-packet packet-${pathIndex}`);
-        packet.style.animation = `data-flow-${pathIndex} 3s infinite ${Math.random() * 2}s linear`;
-        packets.appendChild(packet);
-      });
-      
-      return packets;
-    };
+    // Add permanent animations
+    gsap.to(cpuRef.current, {
+      boxShadow: "0 0 15px rgba(0, 240, 255, 0.8)",
+      repeat: -1,
+      yoyo: true,
+      duration: 2
+    });
     
-    // Append all elements to SVG
-    svg.appendChild(createCircuitTraces());
-    svg.appendChild(cpu);
-    svg.appendChild(cpuInner);
-    svg.appendChild(createDataPackets());
-    
-    // Add CSS animations
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes circuit-trace-reveal {
-        to { 
-          stroke-dashoffset: 0; 
-        }
-      }
-      
-      @keyframes data-flow-0 {
-        0% { transform: translate(0, 130px); }
-        100% { transform: translate(150px, 170px); }
-      }
-      
-      @keyframes data-flow-3 {
-        0% { transform: translate(400px, 150px); }
-        100% { transform: translate(250px, 180px); }
-      }
-      
-      @keyframes data-flow-6 {
-        0% { transform: translate(130px, 0); }
-        100% { transform: translate(170px, 150px); }
-      }
-      
-      @keyframes data-flow-9 {
-        0% { transform: translate(160px, 400px); }
-        100% { transform: translate(180px, 250px); }
-      }
-      
-      .circuit-cpu {
-        animation: pulse 3s infinite;
-      }
-      
-      .circuit-node {
-        animation: node-pulse 2s infinite;
-      }
-      
-      @keyframes pulse {
-        0% { filter: drop-shadow(0 0 3px rgba(0, 240, 255, 0.5)); }
-        50% { filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.8)); }
-        100% { filter: drop-shadow(0 0 3px rgba(0, 240, 255, 0.5)); }
-      }
-      
-      @keyframes node-pulse {
-        0% { r: 4; fill: #2de2e6; }
-        50% { r: 6; fill: #00f0ff; }
-        100% { r: 4; fill: #2de2e6; }
-      }
-    `;
-    
-    document.head.appendChild(style);
-    container.appendChild(svg);
-    
+    // Cleanup function
     return () => {
-      if (document.head.contains(style)) {
-        document.head.removeChild(style);
+      if (timelineRef.current) {
+        timelineRef.current.kill();
       }
+      gsap.killTweensOf(cpuRef.current);
+      gsap.killTweensOf(pathRefs.current);
+      gsap.killTweensOf(packetRefs.current);
     };
   }, []);
+  
+  // Render data packets function
+  const renderDataPackets = () => {
+    return dataPackets.map((packet, index) => (
+      <div
+        key={`packet-${index}`}
+        ref={addPacketRef}
+        className="data-packet"
+        style={{
+          position: 'absolute',
+          width: `${packet.size}px`,
+          height: `${packet.size}px`,
+          backgroundColor: packet.color,
+          borderRadius: '50%',
+          boxShadow: `0 0 8px ${packet.color}`,
+          zIndex: 10
+        }}
+      />
+    ));
+  };
   
   return (
     <div 
       ref={containerRef} 
+      className="hero-animation"
       style={{ 
         width: '100%', 
         height: '100%',
         position: 'relative',
-        maxWidth: '500px',
-        maxHeight: '400px',
-        margin: '0 auto'
+        maxWidth: '600px',
+        maxHeight: '500px',
+        margin: '0 auto',
+        overflow: 'visible'
       }}
-    />
+    >
+      {/* SVG Layer for Paths */}
+      <svg 
+        className="circuit-paths-svg" 
+        width="100%" 
+        height="100%" 
+        viewBox="0 0 500 500" 
+        preserveAspectRatio="xMidYMid meet"
+        style={{ position: 'absolute', top: 0, left: 0 }}
+      >
+        {/* Render all circuit paths */}
+        {circuitPaths.map((path, index) => (
+          <path
+            key={path.id}
+            id={path.id}
+            ref={addPathRef}
+            d={path.d}
+            stroke="#00f0ff"
+            strokeWidth={2}
+            fill="none"
+            strokeLinecap="round"
+            style={{
+              filter: 'drop-shadow(0 0 3px rgba(0, 240, 255, 0.5))'
+            }}
+          />
+        ))}
+        
+        {/* Grid lines inside CPU */}
+        {gridLines.map((line) => (
+          <path
+            key={line.id}
+            id={line.id}
+            className="grid-line"
+            d={line.d}
+            stroke={line.color}
+            strokeWidth={line.strokeWidth}
+            fill="none"
+            opacity={0}
+          />
+        ))}
+      </svg>
+      
+      {/* CPU Rectangle */}
+      <div
+        ref={cpuRef}
+        className="cpu-component"
+        style={{
+          position: 'absolute',
+          top: '210px',
+          left: 'calc(50% - 40px)',  // Center precisely (50% - half of width)
+          width: '80px',
+          height: '80px',
+          borderRadius: '3px',
+          backgroundColor: 'rgba(0, 240, 255, 0.08)',
+          border: '1.5px solid #00f0ff',
+          boxShadow: '0 0 10px rgba(0, 240, 255, 0.5)',
+          zIndex: 5,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          cursor: 'pointer',
+          transformOrigin: 'center center'
+        }}
+        onMouseEnter={() => handleCpuHover(true)}
+        onMouseLeave={() => handleCpuHover(false)}
+      >
+        {/* CPU Text */}
+        <div style={{ 
+          fontSize: '16px', 
+          fontWeight: 'bold', 
+          color: '#00f0ff',
+          textShadow: '0 0 5px rgba(0, 240, 255, 0.8)'
+        }}>
+          CPU
+        </div>
+        
+        {/* CPU Corners */}
+        <div className="cpu-corner" style={{
+          position: 'absolute',
+          top: '-5px',
+          left: '-5px',
+          width: '10px',
+          height: '10px',
+          borderTop: '2px solid #00f0ff',
+          borderLeft: '2px solid #00f0ff',
+          opacity: 0,
+          transform: 'scale(0)'
+        }}></div>
+        <div className="cpu-corner" style={{
+          position: 'absolute',
+          top: '-5px',
+          right: '-5px',
+          width: '10px',
+          height: '10px',
+          borderTop: '2px solid #00f0ff',
+          borderRight: '2px solid #00f0ff',
+          opacity: 0,
+          transform: 'scale(0)'
+        }}></div>
+        <div className="cpu-corner" style={{
+          position: 'absolute',
+          bottom: '-5px',
+          left: '-5px',
+          width: '10px',
+          height: '10px',
+          borderBottom: '2px solid #00f0ff',
+          borderLeft: '2px solid #00f0ff',
+          opacity: 0,
+          transform: 'scale(0)'
+        }}></div>
+        <div className="cpu-corner" style={{
+          position: 'absolute',
+          bottom: '-5px',
+          right: '-5px',
+          width: '10px',
+          height: '10px',
+          borderBottom: '2px solid #00f0ff',
+          borderRight: '2px solid #00f0ff',
+          opacity: 0,
+          transform: 'scale(0)'
+        }}></div>
+      </div>
+      
+      {/* Data Packets */}
+      {renderDataPackets()}
+    </div>
   );
 };
 

@@ -1,0 +1,355 @@
+@use '../../styles/base/variables' as *;
+
+.hero-section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(0, 240, 255, 0.03) 0%, rgba(0, 0, 0, 0) 70%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 2rem 0;
+  
+  @media (max-width: 768px) {
+    flex-direction: column-reverse;
+    text-align: center;
+  }
+}
+
+/* Left side text content */
+.hero-text {
+  flex: 0 0 50%;
+  padding-right: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  
+  @media (max-width: 768px) {
+    flex: 0 0 100%;
+    padding-right: 0;
+    align-items: center;
+    margin-top: 2rem;
+  }
+}
+
+/* Right side visual content */
+.hero-visual {
+  flex: 0 0 50%;
+  height: 500px; // Adjusted to match container
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  
+  @media (max-width: 992px) {
+    height: 450px;
+  }
+  
+  @media (max-width: 768px) {
+    flex: 0 0 100%;
+    height: 400px;
+    margin-bottom: 0;
+  }
+  
+  @media (max-width: 576px) {
+    height: 350px;
+  }
+}
+
+/* Enhanced Hero Animation Styles */
+.hero-animation {
+  position: relative;
+  filter: drop-shadow(0 0 20px rgba(0, 240, 255, 0.15));
+  
+  @media (max-width: 576px) {
+    transform: scale(0.8);
+  }
+}
+
+/* CPU Component Styles */
+.cpu-component {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.05) !important;
+  }
+}
+
+/* Data Packet Animation */
+.data-packet {
+  border-radius: 50%;
+  filter: blur(1px);
+  animation: pulse-glow 2s infinite alternate ease-in-out;
+}
+
+/* Text elements styling */
+.hero-greeting {
+  font-size: 1.5rem;
+  color: $text-secondary;
+  margin: 0 0 0.5rem 0;
+  font-weight: 400;
+  
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+  }
+}
+
+.hero-name {
+  font-size: 4rem;
+  color: $white;
+  margin: 0 0 1rem 0;
+  font-weight: 700;
+  
+  @media (max-width: 768px) {
+    font-size: 2.8rem;
+  }
+  
+  @media (max-width: 576px) {
+    font-size: 2.5rem;
+  }
+}
+
+.hero-title {
+  font-size: 2.5rem;
+  color: $electric-blue;
+  margin: 0 0 1rem 0;
+  font-weight: 500;
+  min-height: 3rem;
+  display: inline-block;
+  border-right: 3px solid $electric-blue;
+  padding-right: 0.5rem;
+  white-space: nowrap;
+  animation: blinkCursor 0.75s step-end infinite;
+  
+  @media (max-width: 768px) {
+    font-size: 2rem;
+    min-height: 2.5rem;
+  }
+  
+  @media (max-width: 576px) {
+    font-size: 1.8rem;
+  }
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  color: $text-secondary;
+  margin: 0 0 2rem 0;
+  max-width: 450px;
+  line-height: 1.6;
+  
+  @media (max-width: 768px) {
+    font-size: 1.1rem;
+    max-width: 100%;
+  }
+}
+
+.rotating-term {
+  display: inline-block;
+  position: relative;
+  min-width: 120px;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  
+  @media (max-width: 576px) {
+    min-width: auto;
+    display: block;
+    margin-top: 0.25rem;
+  }
+}
+
+.text-electric {
+  color: $electric-blue;
+  font-weight: 500;
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: $electric-blue;
+    opacity: 0.5;
+  }
+}
+
+/* Button styling with enhanced effects */
+.hero-buttons {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+  
+  @media (max-width: 576px) {
+    gap: 1rem;
+    flex-direction: column;
+    width: 100%;
+  }
+}
+
+.btn-primary, 
+.btn-secondary {
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  letter-spacing: 0.5px;
+  
+  @media (max-width: 576px) {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+.btn-primary {
+  background-color: $electric-blue;
+  color: $navy-blue;
+  border: none;
+  
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 240, 255, 0.3);
+    
+    .btn-glow {
+      transform: translateX(110%);
+    }
+  }
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: $electric-blue;
+  border: 1px solid $electric-blue;
+  
+  &:hover {
+    background-color: rgba(0, 240, 255, 0.1);
+  }
+}
+
+.btn-glow {
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.8s ease;
+  pointer-events: none;
+}
+
+/* Cursor blinking animation */
+@keyframes blinkCursor {
+  0%, 100% { border-color: $electric-blue; }
+  50% { border-color: transparent; }
+}
+
+/* Data packet glowing animation */
+@keyframes pulse-glow {
+  from { opacity: 0.7; box-shadow: 0 0 5px currentColor; }
+  to { opacity: 1; box-shadow: 0 0 12px currentColor; }
+}
+
+/* Scroll indicator */
+.scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+  
+  &:hover {
+    opacity: 1;
+  }
+  
+  @media (max-width: 768px) {
+    bottom: 1rem;
+  }
+}
+
+.mouse {
+  width: 26px;
+  height: 42px;
+  border: 2px solid $electric-blue;
+  border-radius: 13px;
+  display: flex;
+  justify-content: center;
+  padding-top: 8px;
+}
+
+.wheel {
+  width: 4px;
+  height: 8px;
+  background-color: $electric-blue;
+  border-radius: 2px;
+  animation: scroll-wheel 1.5s infinite;
+}
+
+.scroll-arrows {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  span {
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid $electric-blue;
+    border-bottom: 2px solid $electric-blue;
+    transform: rotate(45deg);
+    margin: -5px 0;
+    animation: scroll-arrows 1.5s infinite;
+    
+    &:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+  }
+}
+
+@keyframes scroll-wheel {
+  0% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(10px); }
+}
+
+@keyframes scroll-arrows {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}

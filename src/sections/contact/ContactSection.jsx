@@ -1,14 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
+import emailjs from '@emailjs/browser';
 import CircuitPath from '../../components/circuit/CircuitPath';
-import CircuitNode from '../../components/circuit/CircuitNode';
-import './ContactSection.scss';
 
 const ContactSection = () => {
   const [formState, setFormState] = useState({
     name: '',
     email: '',
     message: '',
+    subject: 'New Portfolio Contact Form Message'
   });
   
   const [formErrors, setFormErrors] = useState({});
@@ -20,8 +20,14 @@ const ContactSection = () => {
   const [touched, setTouched] = useState({
     name: false,
     email: false,
-    message: false,
+    message: false
   });
+
+  // EmailJS configuration constants
+  // These will need to be replaced with your actual EmailJS details
+  const EMAILJS_SERVICE_ID = 'service_4usss6b'; // Replace with your Service ID
+  const EMAILJS_TEMPLATE_ID = 'template_xng2tve'; // Replace with your Template ID
+  const EMAILJS_PUBLIC_KEY = 'n1DCLgBQnMnhtY92Q'; // Replace with your Public Key
 
   // Handle input changes
   const handleChange = (e) => {
@@ -91,6 +97,12 @@ const ContactSection = () => {
     return nameValid && emailValid && messageValid;
   };
 
+  // Initialize EmailJS
+  useEffect(() => {
+    // Initialize EmailJS with your public key
+    emailjs.init(EMAILJS_PUBLIC_KEY);
+  }, []);
+
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -115,18 +127,30 @@ const ContactSection = () => {
     setFormStatus('submitting');
     
     try {
-      // Simulate form submission - replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Send the email using EmailJS
+      const result = await emailjs.sendForm(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        formRef.current,
+        EMAILJS_PUBLIC_KEY
+      );
+      
+      console.log('Email successfully sent!', result.text);
       
       // Success
       setFormStatus('success');
-      setFormState({ name: '', email: '', message: '' });
+      setFormState({ 
+        name: '', 
+        email: '', 
+        message: '',
+        subject: 'New Portfolio Contact Form Message'
+      });
       setTouched({ name: false, email: false, message: false });
       
       // Reset to null after 5 seconds
       setTimeout(() => setFormStatus(null), 5000);
     } catch (error) {
-      console.error('Form submission error:', error);
+      console.error('Email sending failed:', error);
       setFormStatus('error');
       
       // Reset to null after 5 seconds
@@ -143,7 +167,7 @@ const ContactSection = () => {
         if (entry.isIntersecting) {
           // Animate section elements when they come into view
           gsap.fromTo(
-            section.querySelectorAll('.form-group, .contact-title, .contact-subtitle, .circuit-node, .circuit-path'),
+            section.querySelectorAll('.form-group, .contact-title, .contact-subtitle, .circuit-path'),
             { opacity: 0, y: 30 },
             { 
               opacity: 1, 
@@ -175,28 +199,23 @@ const ContactSection = () => {
         
         <div className="contact-container">
           <div className="circuit-decoration">
-            <CircuitNode position="top-left" active={true} />
             <CircuitPath 
-              start={{ x: 5, y: 5 }} 
-              path="h 100 v 50 h 80" 
+              d="M5,5 H 100 V 50 H 180" 
               animated={true}
               duration={1.5}
             />
-            <CircuitNode position="mid-right" active={formStatus === 'success'} />
             <CircuitPath 
-              start={{ x: 185, y: 55 }} 
-              path="v 100 h -80 v 70" 
+              d="M185,55 V 155 H 100 V 225" 
               animated={formStatus !== null}
               duration={1}
             />
-            <CircuitNode position="bottom-left" active={formStatus === 'submitting'} />
           </div>
           
           <form ref={formRef} className="contact-form" onSubmit={handleSubmit}>
+            {/* Name field */}
             <div className="form-group">
               <label htmlFor="name" className="circuit-label">
                 Name
-                <CircuitNode position="label-node" small active={touched.name && !formErrors.name} />
               </label>
               <input
                 type="text"
@@ -213,10 +232,10 @@ const ContactSection = () => {
               )}
             </div>
             
+            {/* Email field */}
             <div className="form-group">
               <label htmlFor="email" className="circuit-label">
                 Email
-                <CircuitNode position="label-node" small active={touched.email && !formErrors.email} />
               </label>
               <input
                 type="email"
@@ -233,10 +252,17 @@ const ContactSection = () => {
               )}
             </div>
             
+            {/* Hidden subject field for email template */}
+            <input 
+              type="hidden" 
+              name="subject" 
+              value={formState.subject} 
+            />
+            
+            {/* Message field */}
             <div className="form-group">
               <label htmlFor="message" className="circuit-label">
                 Message
-                <CircuitNode position="label-node" small active={touched.message && !formErrors.message} />
               </label>
               <textarea
                 id="message"
@@ -253,6 +279,7 @@ const ContactSection = () => {
               )}
             </div>
             
+            {/* Submit button */}
             <div className="form-submit">
               <button 
                 type="submit" 
@@ -270,20 +297,19 @@ const ContactSection = () => {
                 ) : (
                   <span className="button-text">Send Message</span>
                 )}
-                <CircuitNode position="button-node" active={formStatus === 'success'} />
               </button>
             </div>
             
+            {/* Success message */}
             {formStatus === 'success' && (
               <div className="success-message">
-                <CircuitNode position="success-node" active />
                 <p>Thank you for reaching out! I'll get back to you soon.</p>
               </div>
             )}
             
+            {/* Error message */}
             {formStatus === 'error' && (
               <div className="error-message-container">
-                <CircuitNode position="error-node" active />
                 <p>Something went wrong. Please try again later.</p>
               </div>
             )}
