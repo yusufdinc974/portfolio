@@ -1,0 +1,196 @@
+/* Add this to your existing styles or create a new Interests.scss file */
+
+.interests-container {
+    margin-bottom: 3rem;
+    
+    h3 {
+      font-size: 1.8rem;
+      margin-bottom: 2rem;
+      position: relative;
+      display: inline-block;
+      
+      &:after {
+        content: '';
+        position: absolute;
+        bottom: -0.5rem;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background-color: var(--color-accent, #4bcffa);
+      }
+    }
+    
+    .interests-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+      
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .interest-item {
+      position: relative;
+      padding: 1.5rem;
+      background-color: var(--color-background-light, rgba(13, 30, 51, 0.5));
+      border-radius: 8px;
+      border: 1px solid var(--color-border, rgba(75, 207, 250, 0.2));
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      overflow: hidden;
+      
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      }
+      
+      h4 {
+        font-size: 1.2rem;
+        margin: 1rem 0 0.5rem;
+        color: var(--color-text, #e6f1ff);
+      }
+      
+      p {
+        font-size: 0.95rem;
+        color: var(--color-text-light, #8892b0);
+        line-height: 1.6;
+      }
+      
+      .interest-icon {
+        position: relative;
+        display: inline-block;
+        
+        .icon {
+          font-size: 1.8rem;
+          display: block;
+          margin-bottom: 0.5rem;
+        }
+      }
+      
+      .interest-circuit-path {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0.6;
+      }
+    }
+    
+    .interests-circuit-connector {
+      position: relative;
+      height: 80px;
+      margin: 2rem 0;
+      opacity: 0.7;
+    }
+  }
+  
+  /* Languages Section Styles */
+  .languages-section {
+    margin-top: 4rem;
+    position: relative;
+    
+    h3 {
+      font-size: 1.8rem;
+      margin-bottom: 2.5rem;
+      position: relative;
+      display: inline-block;
+      
+      &:after {
+        content: '';
+        position: absolute;
+        bottom: -0.5rem;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background-color: var(--color-accent, #4bcffa);
+      }
+    }
+    
+    .languages-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      
+      @media (max-width: 768px) {
+        flex-direction: column;
+      }
+    }
+    
+    .language-item {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      width: calc(50% - 0.75rem); /* Two items per row with gap */
+      padding: 1.2rem;
+      background-color: var(--color-background-light, rgba(13, 30, 51, 0.5));
+      border-radius: 8px;
+      border: 1px solid var(--color-border, rgba(75, 207, 250, 0.2));
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      
+      @media (max-width: 992px) {
+        width: 100%; /* One item per row on smaller screens */
+      }
+      
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+      }
+      
+      .language-flag {
+        flex-shrink: 0;
+        padding-top: 0.25rem;
+        
+        img {
+          border-radius: 2px;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+      }
+      
+      .language-details {
+        flex-grow: 1;
+        
+        h4 {
+          font-size: 1.1rem;
+          margin: 0 0 0.3rem;
+          color: var(--color-text, #e6f1ff);
+        }
+        
+        .language-proficiency {
+          font-size: 0.9rem;
+          color: var(--color-text-light, #8892b0);
+          margin: 0 0 0.5rem;
+          opacity: 0.8;
+        }
+        
+        .language-progress-container {
+          height: 6px;
+          background-color: rgba(255, 255, 255, 0.1);
+          border-radius: 3px;
+          margin-bottom: 0.7rem;
+          overflow: hidden;
+        }
+        
+        .language-progress {
+          height: 100%;
+          border-radius: 3px;
+          transition: width 1s ease-out;
+        }
+        
+        .language-description {
+          font-size: 0.85rem;
+          color: var(--color-text-light, #8892b0);
+          margin: 0.5rem 0 0;
+          font-style: italic;
+        }
+      }
+    }
+    
+    .languages-circuit {
+      position: relative;
+      height: 80px;
+      margin: 2rem 0;
+      opacity: 0.7;
+    }
+  }

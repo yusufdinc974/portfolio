@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import CircuitNode from '../../components/circuit/CircuitNode';
 import CircuitPath from '../../components/circuit/CircuitPath';
+import { aboutMe } from '../../data/experience';
 import './Bio.scss';
 
 const Bio = () => {
@@ -64,24 +65,27 @@ const Bio = () => {
     }
   };
   
+  // Function to format bio text into paragraphs
+  const formatBio = (bioText) => {
+    if (!bioText) return [];
+    
+    // Split the bio into paragraphs (if it's one long string)
+    const paragraphs = bioText.includes('\n') 
+      ? bioText.split('\n').filter(p => p.trim() !== '')
+      : [bioText];
+      
+    return paragraphs;
+  };
+  
+  const bioParagraphs = formatBio(aboutMe.bio);
+  
   return (
     <div className="bio-container" ref={bioRef}>
       <div className="bio-content">
         <h3 className="bio-header">Who I Am</h3>
-        <p>
-          I'm a passionate Computer Engineering student with a love for both hardware and software. 
-          My journey began with disassembling old computers and has evolved into designing complex systems 
-          that bridge the gap between electrical engineering and computer science.
-        </p>
-        <p>
-          Through my academic and personal projects, I've developed a deep understanding of how 
-          computational systems work from the transistor level all the way up to high-level software
-          architectures, allowing me to solve problems with a unique perspective.
-        </p>
-        <p>
-          When I'm not coding or soldering, I enjoy exploring emerging technologies and contributing 
-          to open-source projects that push the boundaries of what's possible in computer engineering.
-        </p>
+        {bioParagraphs.map((paragraph, index) => (
+          <p key={index}>{paragraph}</p>
+        ))}
       </div>
       
       <div className="bio-circuit">

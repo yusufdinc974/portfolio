@@ -2,47 +2,23 @@ import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import CircuitNode from '../../components/circuit/CircuitNode';
 import CircuitPath from '../../components/circuit/CircuitPath';
-
-// Sample timeline data (should eventually come from data file)
-const timelineData = [
-  {
-    id: 1,
-    type: 'education',
-    title: 'Bachelor of Computer Engineering',
-    organization: 'University of Technology',
-    period: '2019 - 2023',
-    description: 'Specialized in embedded systems and computer architecture with a minor in software engineering.',
-  },
-  {
-    id: 2,
-    type: 'experience',
-    title: 'Software Engineering Intern',
-    organization: 'TechCorp Inc.',
-    period: 'Summer 2022',
-    description: "Developed firmware for IoT devices and contributed to the company's cloud infrastructure.",
-  },
-  {
-    id: 3,
-    type: 'education',
-    title: 'Advanced Certification in AI',
-    organization: 'AI Institute',
-    period: 'Fall 2022',
-    description: 'Completed specialized training in machine learning algorithms and neural networks.',
-  },
-  {
-    id: 4,
-    type: 'experience',
-    title: 'Research Assistant',
-    organization: 'University Research Lab',
-    period: '2022 - 2023',
-    description: 'Assisted in research on new computer architectures for efficient AI computation.',
-  },
-];
+import { education, experience } from '../../data/experience';
 
 const Timeline = () => {
   const timelineRef = useRef(null);
   const timelineItemsRef = useRef([]);
   const timelinePathRef = useRef(null);
+  
+  // Combine education and experience data, sort by most recent first
+  const combinedTimelineData = [...education, ...experience].sort((a, b) => {
+    // Extract the end year from period string (e.g., "2019 - 2023" → 2023)
+    const getEndYear = (period) => {
+      const years = period.split(' - ');
+      return parseInt(years[years.length - 1], 10);
+    };
+    
+    return getEndYear(b.period) - getEndYear(a.period);
+  });
   
   useEffect(() => {
     // Reset refs array on each render
@@ -111,35 +87,76 @@ const Timeline = () => {
           />
         </div>
         
-        {timelineData.map((item, index) => (
-          <div 
-            key={item.id}
-            className={`timeline-item ${item.type}`}
-            ref={addToRefs}
-          >
-            <div className="timeline-node">
-              <CircuitNode 
-                size="medium" 
-                pulseColor={item.type === 'education' ? '#2ecc71' : '#e74c3c'} 
+        {combinedTimelineData.map((item, index) => {
+          // Determine if it's education or experience
+          const itemType = item.degree ? 'education' : 'experience';
+          
+          return (
+            <div 
+              key={item.id}
+              className={`timeline-item ${itemType}`}
+              ref={addToRefs}
+            >
+              <div className="timeline-node">
+                <CircuitNode 
+                  size="medium" 
+                  pulseColor={itemType === 'education' ? '#2ecc71' : '#e74c3c'} 
+                />
+              </div>
+              
+              <div className="timeline-content">
+                <h4>{item.degree || item.position}</h4>
+                <h5>{item.institution || item.company}</h5>
+                <p className="timeline-period">{item.period}</p>
+                <p className="timeline-description">{item.description}</p>
+                
+                {/* Show achievements for experience items */}
+                {item.achievements && item.achievements.length > 0 && (
+                  <div className="achievements">
+                    <h6>Key Achievements:</h6>
+                    <ul>
+                      {item.achievements.map((achievement, i) => (
+                        <li key={i}>{achievement}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                
+                {/* Show relevant courses for education items */}
+                {item.courses && item.courses.length > 0 && (
+                  <div className="courses">
+                    <h6>Relevant Courses:</h6>
+                    <div className="course-tags">
+                      {item.courses.map((course, i) => (
+                        <span key={i} className="course-tag">{course}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                {/* Show technologies for experience items */}
+                {item.technologies && item.technologies.length > 0 && (
+                  <div className="technologies">
+                    <h6>Technologies:</h6>
+                    <div className="tech-tags">
+                      {item.technologies.map((tech, i) => (
+                        <span key={i} className="tech-tag">{tech}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+              
+              {/* Connecting path from main timeline to content */}
+              <CircuitPath 
+                path={`M20,${30 + index * 10} L40,${30 + index * 10}`} 
+                strokeWidth={2}
+                color={itemType === 'education' ? '#2ecc71' : '#e74c3c'}
+                className="timeline-connector"
               />
             </div>
-            
-            <div className="timeline-content">
-              <h4>{item.title}</h4>
-              <h5>{item.organization}</h5>
-              <p className="timeline-period">{item.period}</p>
-              <p className="timeline-description">{item.description}</p>
-            </div>
-            
-            {/* Connecting path from main timeline to content */}
-            <CircuitPath 
-              path={`M20,${30 + index * 10} L40,${30 + index * 10}`} 
-              strokeWidth={2}
-              color={item.type === 'education' ? '#2ecc71' : '#e74c3c'}
-              className="timeline-connector"
-            />
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

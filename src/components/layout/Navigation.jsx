@@ -32,7 +32,7 @@ const Navigation = () => {
                 <path d="M5 15H1" stroke="#00f0ff" strokeWidth="2" />
               </svg>
             </div>
-            <span>YourName</span>
+            <span>Yusuf Dinç</span>
           </a>
 
           <nav className="nav">
