@@ -13,9 +13,40 @@ gsap.registerPlugin(ScrollTrigger);
 
 const SkillsSection = () => {
   const [activeView, setActiveView] = useState('categories'); // 'categories' or 'graph'
-  const [selectedCategory, setSelectedCategory] = useState(null);
   const sectionRef = useRef(null);
   const decorationRef = useRef(null);
+
+  // Group skills into rows for better layout
+  const organizeSkillsIntoRows = () => {
+    const categoryGroups = [];
+    let currentRow = [];
+    let currentRowWidth = 0;
+    const containerWidth = 1200; // Maximum container width in pixels
+    const cardWidth = 380; // Approximate width of each card including margins
+    const maxCardsPerRow = Math.floor(containerWidth / cardWidth);
+
+    skills.forEach((category, index) => {
+      // Add category to current row if there's space
+      if (currentRow.length < maxCardsPerRow) {
+        currentRow.push(category);
+        currentRowWidth += cardWidth;
+      } else {
+        // Start a new row
+        categoryGroups.push([...currentRow]);
+        currentRow = [category];
+        currentRowWidth = cardWidth;
+      }
+    });
+
+    // Add any remaining categories
+    if (currentRow.length > 0) {
+      categoryGroups.push([...currentRow]);
+    }
+
+    return categoryGroups;
+  };
+
+  const skillRows = organizeSkillsIntoRows();
 
   useEffect(() => {
     // Animate section title and description
@@ -85,20 +116,6 @@ const SkillsSection = () => {
     };
   }, []);
 
-  // Handle category selection
-  const handleCategorySelect = (categoryName) => {
-    if (selectedCategory === categoryName) {
-      setSelectedCategory(null);
-    } else {
-      setSelectedCategory(categoryName);
-    }
-  };
-
-  // Filter skills by selected category
-  const filteredSkills = selectedCategory
-    ? skills.filter(category => category.name === selectedCategory)
-    : skills;
-
   return (
     <section id="skills" className="section skills-section" ref={sectionRef}>
       <div className="container">
@@ -163,29 +180,17 @@ const SkillsSection = () => {
         {/* Categories view */}
         {activeView === 'categories' && (
           <div className="skills-categories">
-            {/* Category filters */}
-            <div className="category-filters">
-              {skills.map((category) => (
-                <button
-                  key={`filter-${category.name}`}
-                  className={`category-filter ${selectedCategory === category.name ? 'active' : ''}`}
-                  onClick={() => handleCategorySelect(category.name)}
-                >
-                  {category.name}
-                </button>
-              ))}
-            </div>
-
-            {/* Skill categories */}
-            <div className="categories-container">
-              {filteredSkills.map((category, index) => (
-                <SkillCategory
-                  key={`category-${category.name}`}
-                  category={category}
-                  index={index}
-                />
-              ))}
-            </div>
+            {skillRows.map((row, rowIndex) => (
+              <div key={`row-${rowIndex}`} className="skill-row">
+                {row.map((category, colIndex) => (
+                  <SkillCategory
+                    key={`category-${category.name}`}
+                    category={category}
+                    index={(rowIndex * 3) + colIndex} // Ensure unique index for color variation
+                  />
+                ))}
+              </div>
+            ))}
           </div>
         )}
 

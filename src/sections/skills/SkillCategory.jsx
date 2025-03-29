@@ -16,14 +16,14 @@ const SkillCategory = ({ category, index }) => {
     gsap.fromTo(
       categoryRef.current,
       { 
-        y: 50,
+        y: 30,
         opacity: 0 
       },
       {
         y: 0,
         opacity: 1,
         duration: 0.7,
-        delay: index * 0.1,
+        delay: 0.1 * (index % 3), // Stagger based on position in row
         ease: 'power3.out',
         scrollTrigger: {
           trigger: categoryRef.current,
@@ -72,31 +72,24 @@ const SkillCategory = ({ category, index }) => {
       
       // Pattern 3
       <svg className="circuit-svg" width="150" height="150" viewBox="0 0 150 150">
-        <path d="M10,75 L40,75 L40,40 L75,40 L75,10" stroke="currentColor" fill="none" strokeWidth="2" />
-        <path d="M75,140 L75,110 L110,110 L110,75 L140,75" stroke="currentColor" fill="none" strokeWidth="2" />
+        <path d="M10,75 C40,75 40,40 75,40 L75,10" stroke="currentColor" fill="none" strokeWidth="2" />
+        <path d="M75,140 L75,110 C75,75 110,75 140,75" stroke="currentColor" fill="none" strokeWidth="2" />
         <circle cx="10" cy="75" r="3" fill="currentColor" />
-        <circle cx="40" cy="75" r="3" fill="currentColor" />
-        <circle cx="40" cy="40" r="3" fill="currentColor" />
         <circle cx="75" cy="40" r="3" fill="currentColor" />
         <circle cx="75" cy="10" r="3" fill="currentColor" />
         <circle cx="75" cy="140" r="3" fill="currentColor" />
         <circle cx="75" cy="110" r="3" fill="currentColor" />
-        <circle cx="110" cy="110" r="3" fill="currentColor" />
-        <circle cx="110" cy="75" r="3" fill="currentColor" />
         <circle cx="140" cy="75" r="3" fill="currentColor" />
       </svg>,
       
       // Pattern 4
       <svg className="circuit-svg" width="150" height="150" viewBox="0 0 150 150">
-        <path d="M75,10 L75,40 L40,40 L40,75 L75,75 L75,110 L110,110 L110,140" stroke="currentColor" fill="none" strokeWidth="2" />
+        <path d="M75,10 L75,40 C40,40 40,75 40,75 C40,110 75,110 75,110 L75,140" stroke="currentColor" fill="none" strokeWidth="2" />
         <circle cx="75" cy="10" r="3" fill="currentColor" />
         <circle cx="75" cy="40" r="3" fill="currentColor" />
-        <circle cx="40" cy="40" r="3" fill="currentColor" />
         <circle cx="40" cy="75" r="3" fill="currentColor" />
-        <circle cx="75" cy="75" r="3" fill="currentColor" />
         <circle cx="75" cy="110" r="3" fill="currentColor" />
-        <circle cx="110" cy="110" r="3" fill="currentColor" />
-        <circle cx="110" cy="140" r="3" fill="currentColor" />
+        <circle cx="75" cy="140" r="3" fill="currentColor" />
       </svg>,
       
       // Pattern 5
@@ -120,15 +113,30 @@ const SkillCategory = ({ category, index }) => {
     return patterns[categoryIndex % patterns.length];
   };
 
+  // Get category color based on index
+  const getCategoryColor = (index) => {
+    const colors = [
+      'var(--color-blue, #4bcffa)',     // Blue
+      'var(--color-green, #26de81)',    // Green
+      'var(--color-orange, #fd9644)',   // Orange
+      'var(--color-purple, #a55eea)',   // Purple
+      'var(--color-teal, #2bcbba)'      // Teal
+    ];
+    
+    return colors[index % colors.length];
+  };
+
+  const categoryColor = getCategoryColor(index);
+
   return (
     <div 
       className="skill-category" 
       ref={categoryRef}
       style={{
-        '--category-color': `var(--color-category-${index % 5}, var(--color-accent))`
+        '--category-color': categoryColor
       }}
     >
-      <div className="category-header">
+      <div className="category-header" style={{ borderColor: categoryColor }}>
         <h3>{category.name}</h3>
       </div>
       
@@ -137,12 +145,12 @@ const SkillCategory = ({ category, index }) => {
           <SkillBar 
             key={skill.id} 
             skill={skill}
-            color={`var(--color-category-${index % 5}, var(--color-accent))`}
+            color={categoryColor}
           />
         ))}
       </div>
       
-      <div className="background-circuit">
+      <div className="background-circuit" style={{ color: categoryColor }}>
         {getCircuitSvg(index)}
       </div>
     </div>

@@ -9,7 +9,6 @@ const CircuitNode = forwardRef(({
   color = 'var(--color-accent)',
   className = '',
   onClick,
-  pulseEffect = true,
   animateIn = true
 }, ref) => {
   const nodeRef = useRef(null);
@@ -37,71 +36,82 @@ const CircuitNode = forwardRef(({
     }
   }, [animateIn]);
 
+  // Handle click with a ripple effect
+  const handleNodeClick = (e) => {
+    // Create ripple effect
+    if (nodeRef.current) {
+      // Create a ripple element
+      const ripple = document.createElement('div');
+      ripple.className = 'node-ripple';
+      nodeRef.current.appendChild(ripple);
+      
+      // Set ripple style from center
+      const rect = nodeRef.current.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height) * 2;
+      ripple.style.width = `${size}px`;
+      ripple.style.height = `${size}px`;
+      ripple.style.left = `${(rect.width - size) / 2}px`;
+      ripple.style.top = `${(rect.height - size) / 2}px`;
+      ripple.style.backgroundColor = color;
+      
+      // Remove the ripple after animation completes
+      setTimeout(() => {
+        if (ripple && ripple.parentNode === nodeRef.current) {
+          nodeRef.current.removeChild(ripple);
+        }
+      }, 800);
+    }
+    
+    // Call the provided onClick handler
+    if (onClick) {
+      onClick(e);
+    }
+  };
+
   // Ensure size is a number
   const nodeSize = typeof size === 'string' ? parseInt(size, 10) || 40 : size;
   
-  // Calculate inner sizes based on the provided size prop
-  const innerSize = nodeSize * 0.7;
-  const coreSize = nodeSize * 0.4;
+  // Calculate inner size based on the provided size prop
+  const innerSize = nodeSize * 0.8;
   
   // Ensure value is between 0 and 100
   const safeValue = Math.min(Math.max(parseInt(value, 10) || 0, 0), 100);
   
   // Calculate brightness based on value (0-100)
-  const brightness = 0.5 + (safeValue / 100) * 0.5;
+  const brightness = 0.6 + (safeValue / 100) * 0.4;
   
   return (
     <div 
       ref={combinedRef}
-      className={`circuit-node ${className} ${pulseEffect ? 'with-pulse' : ''}`} 
+      className={`circuit-node ${className}`} 
       style={{ 
         width: `${nodeSize}px`, 
         height: `${nodeSize}px`,
-        transition: 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s ease'
+        transition: 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s ease',
+        boxShadow: `0 0 ${nodeSize/5}px ${color}`
       }}
-      onClick={onClick}
+      onClick={handleNodeClick}
     >
-      {/* Outer ring */}
-      <div 
-        className="node-outer"
-        style={{ 
-          backgroundColor: color,
-          opacity: brightness * 0.7
-        }}
-      ></div>
-      
-      {/* Inner circle */}
+      {/* Main circle */}
       <div 
         className="node-inner"
         style={{ 
           width: `${innerSize}px`, 
           height: `${innerSize}px`,
           backgroundColor: color,
-          opacity: brightness * 0.9
+          opacity: brightness,
+          boxShadow: `0 0 ${nodeSize/8}px ${color}`
         }}
       >
-        {/* Core */}
+        {/* Core glow for emphasis */}
         <div 
-          className="node-core"
-          style={{ 
-            width: `${coreSize}px`, 
-            height: `${coreSize}px`,
+          className="node-core-glow"
+          style={{
             backgroundColor: color,
-            boxShadow: `0 0 ${nodeSize/5}px ${color}`
+            opacity: 0.6
           }}
         ></div>
       </div>
-      
-      {/* Pulse effect */}
-      {pulseEffect && (
-        <div 
-          className="node-pulse"
-          style={{ 
-            backgroundColor: color,
-            animationDuration: `${3 - (safeValue / 50)}s`
-          }}
-        ></div>
-      )}
       
       {/* Label */}
       {label && (
@@ -125,7 +135,6 @@ CircuitNode.propTypes = {
   color: PropTypes.string,
   className: PropTypes.string,
   onClick: PropTypes.func,
-  pulseEffect: PropTypes.bool,
   animateIn: PropTypes.bool
 };
 

@@ -30,7 +30,7 @@ const CircuitPath = forwardRef(({
     // 1. pathRef is valid
     // 2. Animation is enabled
     // 3. The path is actually an SVG path element with getTotalLength
-    if (pathRef.current && animated && pathRef.current.getTotalLength) {
+    if (pathRef.current && animated && typeof pathRef.current.getTotalLength === 'function') {
       try {
         // Get the total length of the path for animation
         const pathLength = pathRef.current.getTotalLength();
@@ -45,11 +45,12 @@ const CircuitPath = forwardRef(({
 
   // If d prop is missing, don't render the path
   if (!d) {
+    console.warn('CircuitPath component rendered without required "d" prop');
     return null;
   }
 
   return (
-    <svg className="circuit-path-svg" width="100%" height="100%" style={{ position: 'absolute', top: 0, left: 0 }}>
+    <svg className="circuit-path-svg" width="100%" height="100%" style={{ position: 'absolute', top: 0, left: 0, overflow: 'visible' }}>
       <path
         id={id}
         ref={combinedRef}

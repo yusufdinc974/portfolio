@@ -1152,3 +1152,149 @@ section {
   .central-node {
     animation: pulse 2s infinite ease-in-out !important;
   }
+
+  /* Add this CSS to your styles/quick-fix.css file */
+
+/* Force section titles to be visible */
+.section-title, 
+.about-title,
+.skills-section .section-title {
+  display: block !important;
+  visibility: visible !important;
+  font-size: 2.5rem !important;
+  font-weight: 700 !important;
+  margin: 0 0 2rem 0 !important;
+  padding: 1rem 0 !important;
+  color: #e6f1ff !important;
+  text-align: center !important;
+  position: relative !important;
+  opacity: 1 !important;
+  z-index: 100 !important;
+  border-bottom: 3px solid #4bcffa !important;
+  text-transform: none !important;
+  font-family: 'Space Grotesk', sans-serif !important;
+}
+
+/* Debug outline to see if the element is rendering */
+.section-title::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 5px;
+  background-color: #4bcffa !important;
+  border-radius: 3px;
+}
+
+/* Ensure the container is set up correctly */
+.section .container {
+  width: 100% !important;
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  padding: 0 1.5rem !important;
+  position: relative !important;
+}
+
+/* Ensure sections have proper spacing */
+#about, #skills {
+  padding-top: 5rem !important; 
+  margin-top: 2rem !important;
+  position: relative !important;
+}
+
+/* Add debug style to check if titles are being added but hidden */
+#about::before {
+  content: "About Section";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(75, 207, 250, 0.2);
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  color: #4bcffa;
+  z-index: 99;
+}
+
+#skills::before {
+  content: "Skills Section";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(75, 207, 250, 0.2);
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  color: #4bcffa;
+  z-index: 99;
+}
+
+/* Add this to your quick-fix.css file */
+
+/* Hide the "About Section" label while keeping "About Me" */
+#about::before,
+.about-section::before,
+#about div[class*="section-label"],
+#about div[class*="section-tag"],
+#about .section-identifier,
+#about .section-label {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Target the specific element - examine your HTML to find the exact class */
+.about-section .about-section-label,
+#about-section-label,
+div[id*="about-section-label"],
+[class*="about-section-label"] {
+  display: none !important;
+}
+
+/* If it's part of the debug labels we added earlier */
+#about::before {
+  content: "" !important;
+  display: none !important;
+}
+
+/* Add this to your quick-fix.css file */
+
+/* Hide both "About Section" and "Skills Section" labels */
+#about::before,
+#skills::before,
+.about-section::before,
+.skills-section::before,
+#about div[class*="section-label"],
+#skills div[class*="section-label"],
+#about div[class*="section-tag"],
+#skills div[class*="section-tag"],
+#about .section-identifier,
+#skills .section-identifier,
+#about .section-label,
+#skills .section-label,
+div[class*="about-section-label"],
+div[class*="skills-section-label"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* More specific selectors targeting exact text */
+div:has(> div:only-child:contains("About Section")),
+div:has(> div:only-child:contains("Skills Section")),
+div:has(> span:only-child:contains("About Section")),
+div:has(> span:only-child:contains("Skills Section")) {
+  display: none !important;
+}
+
+/* Make sure the main headings stay visible */
+h2.section-title,
+.section-title,
+h2.about-title,
+h2.skills-title {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}

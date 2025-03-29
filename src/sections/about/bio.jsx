@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import CircuitNode from '../../components/circuit/CircuitNode';
 import CircuitPath from '../../components/circuit/CircuitPath';
+import './Bio.scss';
 
 const Bio = () => {
   const bioRef = useRef(null);
@@ -46,10 +47,27 @@ const Bio = () => {
     }
   }, []);
   
+  // Function to handle node click
+  const handleNodeClick = (position) => {
+    // Add your click handler functionality here
+    console.log(`Node clicked: ${position}`);
+    
+    // Example: show a tooltip or highlight related content
+    const bioContent = bioRef.current;
+    if (bioContent) {
+      gsap.to(bioContent.querySelectorAll('p'), {
+        color: 'var(--color-accent)',
+        duration: 0.3,
+        yoyo: true,
+        repeat: 1,
+      });
+    }
+  };
+  
   return (
     <div className="bio-container" ref={bioRef}>
       <div className="bio-content">
-        <h3>Who I Am</h3>
+        <h3 className="bio-header">Who I Am</h3>
         <p>
           I'm a passionate Computer Engineering student with a love for both hardware and software. 
           My journey began with disassembling old computers and has evolved into designing complex systems 
@@ -72,6 +90,7 @@ const Bio = () => {
             value={75}
             size={40} 
             color="#3498db" 
+            onClick={() => handleNodeClick('top-left')}
           />
         </div>
         
@@ -88,6 +107,7 @@ const Bio = () => {
             value={75}
             size={40} 
             color="#3498db" 
+            onClick={() => handleNodeClick('bottom-right')}
           />
         </div>
       </div>

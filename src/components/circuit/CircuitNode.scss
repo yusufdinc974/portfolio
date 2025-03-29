@@ -5,9 +5,10 @@
     justify-content: center;
     border-radius: 50%;
     cursor: pointer;
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
     transform: scale(1);
     opacity: 1;
+    overflow: hidden;
     
     &:hover {
       transform: scale(1.15);
@@ -18,23 +19,10 @@
         transform: translateY(0);
       }
       
-      .node-core {
-        transform: scale(1.1);
+      .node-inner {
+        transform: scale(1.05);
+        opacity: 1;
       }
-      
-      .node-outer {
-        filter: blur(2px);
-      }
-    }
-    
-    .node-outer {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      border: 1px solid currentColor;
-      filter: blur(1px);
-      transition: all 0.3s ease;
     }
     
     .node-inner {
@@ -43,23 +31,17 @@
       align-items: center;
       justify-content: center;
       border-radius: 50%;
-      box-shadow: 0 0 8px rgba(0, 0, 0, 0.2), 
-                  inset 0 0 4px rgba(255, 255, 255, 0.5);
       transition: all 0.3s ease;
     }
     
-    .node-core {
-      border-radius: 50%;
-      transition: all 0.3s ease;
-    }
-    
-    .node-pulse {
+    .node-core-glow {
       position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      opacity: 0;
-      animation: node-pulse 2s infinite ease-out;
+      filter: blur(5px);
     }
     
     .node-label {
@@ -82,44 +64,36 @@
       z-index: 2;
     }
     
-    // Different animation timing for nodes to create organic feeling
-    &:nth-child(3n) .node-pulse {
-      animation-delay: 0.5s;
-    }
-    
-    &:nth-child(3n+1) .node-pulse {
-      animation-delay: 1s;
-    }
-    
-    &:nth-child(3n+2) .node-pulse {
-      animation-delay: 1.5s;
+    // Ripple effect on click
+    .node-ripple {
+      position: absolute;
+      border-radius: 50%;
+      transform: scale(0);
+      animation: node-ripple 0.8s ease-out;
+      opacity: 0.5;
+      pointer-events: none;
     }
   }
   
-  // Pulse animation
-  @keyframes node-pulse {
-    0% {
-      transform: scale(0.95);
-      opacity: 0.7;
-    }
-    100% {
-      transform: scale(1.8);
+  // Ripple animation
+  @keyframes node-ripple {
+    to {
+      transform: scale(2.5);
       opacity: 0;
     }
   }
   
-  // Blink animation for decoration nodes
-  .decoration-node .node-core {
-    animation: core-blink 4s infinite alternate;
+  // Subtle glow for decoration nodes
+  .decoration-node .node-inner {
+    animation: core-glow 4s infinite alternate;
   }
   
-  @keyframes core-blink {
-    0%, 80% {
+  @keyframes core-glow {
+    0% {
       opacity: 0.7;
-      transform: scale(1);
     }
-    90%, 100% {
+    100% {
       opacity: 1;
-      transform: scale(1.2);
+      box-shadow: 0 0 12px currentColor;
     }
   }

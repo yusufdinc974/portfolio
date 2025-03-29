@@ -8,7 +8,7 @@
       position: relative;
       max-width: 1200px;
       margin: 0 auto;
-      padding: 0 1.5rem;
+      padding: 0 1rem;
       z-index: 2;
     }
     
@@ -81,7 +81,7 @@
     .view-toggle {
       display: flex;
       justify-content: center;
-      margin-bottom: 3rem;
+      margin-bottom: 3.5rem;
       gap: 1rem;
       position: relative;
       z-index: 3;
@@ -130,44 +130,15 @@
       max-width: 1200px;
       margin: 0 auto;
       
-      .category-filters {
+      .skill-row {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 0.7rem;
-        margin-bottom: 2.5rem;
+        gap: 1.8rem;
+        margin-bottom: 1.8rem;
         
-        .category-filter {
-          background-color: transparent;
-          border: 1px solid var(--color-border, #233554);
-          color: var(--color-text-light, #8892b0);
-          padding: 0.4rem 1.2rem;
-          border-radius: 1.5rem;
-          font-size: 0.9rem;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          
-          &:hover {
-            color: var(--color-accent, #4bcffa);
-            border-color: var(--color-accent, #4bcffa);
-            transform: translateY(-2px);
-          }
-          
-          &.active {
-            background-color: var(--color-accent, #4bcffa);
-            color: var(--color-navy-blue, #0a192f);
-            border-color: var(--color-accent, #4bcffa);
-          }
-        }
-      }
-      
-      .categories-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-        gap: 2rem;
-        
-        @media (max-width: 768px) {
-          grid-template-columns: 1fr;
+        &:last-child {
+          margin-bottom: 0;
         }
       }
     }
@@ -256,14 +227,17 @@
     border-radius: 0.5rem;
     padding: 1.5rem;
     border: 1px solid var(--color-border, #233554);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     position: relative;
     overflow: hidden;
+    width: 100%;
+    max-width: 370px;
+    margin: 0;
     
     &:hover {
       transform: translateY(-5px);
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
     }
     
     .category-header {
@@ -310,6 +284,15 @@
         width: 100%;
         height: 100%;
       }
+    }
+    
+    // Media query for responsive layout
+    @media (max-width: 1240px) {
+      max-width: 340px;
+    }
+    
+    @media (max-width: 768px) {
+      max-width: 100%;
     }
   }
   
@@ -375,5 +358,20 @@
     }
     100% {
       transform: translateX(100%);
+    }
+  }
+  
+  // Responsive adjustments for skill rows
+  @media (max-width: 1240px) {
+    .skills-section .skills-categories .skill-row {
+      justify-content: space-around;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .skills-section .skills-categories .skill-row {
+      flex-direction: column;
+      align-items: center;
+      gap: 2.5rem;
     }
   }

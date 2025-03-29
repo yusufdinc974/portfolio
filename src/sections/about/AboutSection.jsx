@@ -1,58 +1,76 @@
 import React, { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import CircuitBackground from '../../components/circuit/CircuitBackground';
-import Bio from './bio'; // Ensure this matches the actual filename (case-sensitive)
+import Bio from './bio';
 import Timeline from './Timeline';
 import Interests from './Interests';
+import CircuitPath from '../../components/circuit/CircuitPath';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import './AboutSection.scss';
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
 const AboutSection = () => {
   const sectionRef = useRef(null);
-  
+
   useEffect(() => {
-    // Animation for the entire section
-    gsap.fromTo(
-      sectionRef.current,
-      { opacity: 0, y: 50 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 80%',
-          end: 'bottom 20%',
-          toggleActions: 'play none none reverse',
-        },
+    // Create timeline for section animations
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: 'top 70%',
+        end: 'center center',
+        toggleActions: 'play none none reverse'
       }
-    );
-    
-    // Adjust scroll behavior to account for fixed header
-    const headerHeight = 80; // Adjust based on your header height
-    
-    // Add scroll-margin-top to account for fixed header
-    sectionRef.current.style.scrollMarginTop = `${headerHeight}px`;
-    
-    // Clean up ScrollTrigger on component unmount
+    });
+
+    // Animate section title
+    tl.from('.about-title', {
+      y: 30,
+      opacity: 0,
+      duration: 0.7,
+      ease: 'power3.out'
+    });
+
+    // Clean up animation
     return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      if (tl.scrollTrigger) {
+        tl.scrollTrigger.kill();
+      }
     };
   }, []);
-  
+
   return (
-    <section id="about" className="about-section" ref={sectionRef}>
+    <section id="about" className="section about-section" ref={sectionRef}>
       <div className="container">
-        <h2 className="section-title">About Me</h2>
-        <div className="section-content">
+        <h2 className="section-title about-title">About Me</h2>
+        
+        <div className="about-content">
           <Bio />
+          
+          <div className="about-divider">
+            <CircuitPath 
+              d="M0,0 C100,0 100,50 200,50 C300,50 300,0 400,0"
+              strokeWidth={2}
+              color="var(--color-accent)"
+              className="divider-path"
+            />
+          </div>
+          
           <Timeline />
+          
+          <div className="about-divider">
+            <CircuitPath 
+              d="M400,0 C300,0 300,50 200,50 C100,50 100,0 0,0"
+              strokeWidth={2}
+              color="var(--color-accent)"
+              className="divider-path"
+            />
+          </div>
+          
           <Interests />
         </div>
       </div>
-      <CircuitBackground variant="about" />
     </section>
   );
 };
