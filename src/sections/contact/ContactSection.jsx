@@ -1,329 +1,293 @@
-import React, { useEffect, useRef, useState } from 'react';
-import CircuitNode from '../../components/circuit/CircuitNode';
+import React, { useState, useRef, useEffect } from 'react';
+import { gsap } from 'gsap';
 import CircuitPath from '../../components/circuit/CircuitPath';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import CircuitNode from '../../components/circuit/CircuitNode';
 import './ContactSection.scss';
 
-// Register ScrollTrigger plugin
-gsap.registerPlugin(ScrollTrigger);
-
 const ContactSection = () => {
-  const sectionRef = useRef(null);
-  const formRef = useRef(null);
-  const [formStatus, setFormStatus] = useState('idle'); // idle, submitting, success, error
-  const [formData, setFormData] = useState({
+  const [formState, setFormState] = useState({
     name: '',
     email: '',
-    subject: '',
-    message: ''
+    message: '',
   });
-  const [errors, setErrors] = useState({});
+  
+  const [formErrors, setFormErrors] = useState({});
+  const [formStatus, setFormStatus] = useState(null); // null, 'submitting', 'success', 'error'
+  const formRef = useRef(null);
+  const sectionRef = useRef(null);
+  
+  // Track if fields have been touched
+  const [touched, setTouched] = useState({
+    name: false,
+    email: false,
+    message: false,
+  });
 
-  useEffect(() => {
-    if (!sectionRef.current) return;
-
-    // Create animation timeline
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: sectionRef.current,
-        start: 'top 70%',
-        end: 'center center',
-        toggleActions: 'play none none reverse'
-      }
-    });
-
-    // Animate section title and content
-    tl.from('.section-title', {
-        y: 30,
-        opacity: 0,
-        duration: 0.7,
-        ease: 'power3.out'
-      })
-      .from('.contact-description', {
-        y: 20,
-        opacity: 0,
-        duration: 0.7,
-        ease: 'power3.out'
-      }, '-=0.5')
-      .from('.contact-methods', {
-        y: 20,
-        opacity: 0,
-        stagger: 0.1,
-        duration: 0.5,
-        ease: 'power3.out'
-      }, '-=0.4')
-      .from('.contact-form', {
-        y: 30,
-        opacity: 0,
-        duration: 0.8,
-        ease: 'power3.out'
-      }, '-=0.6');
-
-    // Add entrance animations for form inputs
-    gsap.from('.form-group', {
-      y: 20,
-      opacity: 0,
-      stagger: 0.1,
-      duration: 0.5,
-      scrollTrigger: {
-        trigger: formRef.current,
-        start: 'top 80%',
-        toggleActions: 'play none none none'
-      }
-    });
-
-    // Clean up
-    return () => {
-      if (tl.scrollTrigger) tl.scrollTrigger.kill();
-    };
-  }, []);
-
-  // Handle form input changes
+  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormState(prev => ({ ...prev, [name]: value }));
     
-    // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
+    // Validate on change if the field has been touched
+    if (touched[name]) {
+      validateField(name, value);
     }
   };
 
-  // Validate form
+  // Mark field as touched when blurred
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    setTouched(prev => ({ ...prev, [name]: true }));
+    validateField(name, value);
+  };
+
+  // Validate individual field
+  const validateField = (name, value) => {
+    let errors = { ...formErrors };
+    
+    switch (name) {
+      case 'name':
+        if (!value.trim()) {
+          errors.name = 'Name is required';
+        } else {
+          delete errors.name;
+        }
+        break;
+        
+      case 'email':
+        if (!value.trim()) {
+          errors.email = 'Email is required';
+        } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
+          errors.email = 'Invalid email address';
+        } else {
+          delete errors.email;
+        }
+        break;
+        
+      case 'message':
+        if (!value.trim()) {
+          errors.message = 'Message is required';
+        } else if (value.trim().length < 10) {
+          errors.message = 'Message must be at least 10 characters';
+        } else {
+          delete errors.message;
+        }
+        break;
+        
+      default:
+        break;
+    }
+    
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  // Validate all fields
   const validateForm = () => {
-    const newErrors = {};
+    const nameValid = validateField('name', formState.name);
+    const emailValid = validateField('email', formState.email);
+    const messageValid = validateField('message', formState.message);
     
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
-    }
-    
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
-    }
-    
-    if (!formData.message.trim()) {
-      newErrors.message = 'Message is required';
-    }
-    
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return nameValid && emailValid && messageValid;
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!validateForm()) return;
+    // Mark all fields as touched
+    setTouched({
+      name: true,
+      email: true,
+      message: true,
+    });
+    
+    if (!validateForm()) {
+      // Animate the form shake if validation fails
+      gsap.to(formRef.current, {
+        x: [-10, 10, -5, 5, 0],
+        duration: 0.4,
+        ease: "power2.out"
+      });
+      return;
+    }
     
     setFormStatus('submitting');
     
-    // Simulate form submission (replace with actual implementation)
-    setTimeout(() => {
-      const success = Math.random() > 0.2; // 80% success rate for demo
+    try {
+      // Simulate form submission - replace with actual API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
       
-      if (success) {
-        setFormStatus('success');
-        setFormData({
-          name: '',
-          email: '',
-          subject: '',
-          message: ''
-        });
-        
-        // Reset form status after 5 seconds
-        setTimeout(() => {
-          setFormStatus('idle');
-        }, 5000);
-      } else {
-        setFormStatus('error');
-      }
-    }, 1500);
+      // Success
+      setFormStatus('success');
+      setFormState({ name: '', email: '', message: '' });
+      setTouched({ name: false, email: false, message: false });
+      
+      // Reset to null after 5 seconds
+      setTimeout(() => setFormStatus(null), 5000);
+    } catch (error) {
+      console.error('Form submission error:', error);
+      setFormStatus('error');
+      
+      // Reset to null after 5 seconds
+      setTimeout(() => setFormStatus(null), 5000);
+    }
   };
 
+  // Animations on mount
+  useEffect(() => {
+    const section = sectionRef.current;
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // Animate section elements when they come into view
+          gsap.fromTo(
+            section.querySelectorAll('.form-group, .contact-title, .contact-subtitle, .circuit-node, .circuit-path'),
+            { opacity: 0, y: 30 },
+            { 
+              opacity: 1, 
+              y: 0, 
+              stagger: 0.1, 
+              duration: 0.6, 
+              ease: 'power2.out' 
+            }
+          );
+          
+          // Stop observing after animation
+          observer.disconnect();
+        }
+      });
+    }, { threshold: 0.3 });
+    
+    if (section) {
+      observer.observe(section);
+    }
+    
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="contact" className="section contact-section" ref={sectionRef}>
+    <section id="contact" className="contact-section" ref={sectionRef}>
       <div className="container">
-        <h2 className="section-title">Contact</h2>
-        
-        <div className="contact-description">
-          <p>Let's connect! Whether you have a project in mind, a question about my work, or just want to say hello, I'd love to hear from you.</p>
-        </div>
+        <h2 className="contact-title">Let's Connect</h2>
+        <p className="contact-subtitle">Send me a message and I'll respond as soon as possible</p>
         
         <div className="contact-container">
-          {/* Contact methods */}
-          <div className="contact-sidebar">
-            <div className="contact-methods">
-              <div className="contact-method">
-                <div className="method-icon">
-                  <CircuitNode size={36} color="var(--color-blue)" />
-                  <i className="icon-email"></i>
-                </div>
-                <div className="method-content">
-                  <h4>Email</h4>
-                  <p>info@example.com</p>
-                </div>
-              </div>
-              
-              <div className="contact-method">
-                <div className="method-icon">
-                  <CircuitNode size={36} color="var(--color-green)" />
-                  <i className="icon-linkedin"></i>
-                </div>
-                <div className="method-content">
-                  <h4>LinkedIn</h4>
-                  <p>linkedin.com/in/example</p>
-                </div>
-              </div>
-              
-              <div className="contact-method">
-                <div className="method-icon">
-                  <CircuitNode size={36} color="var(--color-orange)" />
-                  <i className="icon-github"></i>
-                </div>
-                <div className="method-content">
-                  <h4>GitHub</h4>
-                  <p>github.com/example</p>
-                </div>
-              </div>
-            </div>
-            
-            {/* Circuit decoration */}
-            <svg className="circuit-decoration" viewBox="0 0 100 200" preserveAspectRatio="none">
-              <CircuitPath 
-                d="M20,0 C20,50 80,70 80,100 C80,130 20,150 20,200" 
-                blinkEffect={true} 
-              />
-              <CircuitPath 
-                d="M40,0 C40,40 60,60 60,100 C60,140 40,160 40,200" 
-                blinkEffect={true}
-                dashArray="3,3" 
-              />
-            </svg>
+          <div className="circuit-decoration">
+            <CircuitNode position="top-left" active={true} />
+            <CircuitPath 
+              start={{ x: 5, y: 5 }} 
+              path="h 100 v 50 h 80" 
+              animated={true}
+              duration={1.5}
+            />
+            <CircuitNode position="mid-right" active={formStatus === 'success'} />
+            <CircuitPath 
+              start={{ x: 185, y: 55 }} 
+              path="v 100 h -80 v 70" 
+              animated={formStatus !== null}
+              duration={1}
+            />
+            <CircuitNode position="bottom-left" active={formStatus === 'submitting'} />
           </div>
           
-          {/* Contact form */}
-          <div className="contact-form-container">
-            <form className="contact-form" onSubmit={handleSubmit} ref={formRef}>
-              <div className="form-header">
-                <h3>Send a Message</h3>
-                <div className="form-status-indicator">
-                  {formStatus === 'idle' && (
-                    <span className="status-idle">Ready to send</span>
-                  )}
-                  {formStatus === 'submitting' && (
-                    <span className="status-submitting">Sending...</span>
-                  )}
-                  {formStatus === 'success' && (
-                    <span className="status-success">Message sent!</span>
-                  )}
-                  {formStatus === 'error' && (
-                    <span className="status-error">Error sending message</span>
-                  )}
-                </div>
-              </div>
-              
-              <div className="form-body">
-                {/* Name input */}
-                <div className={`form-group ${errors.name ? 'has-error' : ''}`}>
-                  <label htmlFor="name">Name</label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    disabled={formStatus === 'submitting' || formStatus === 'success'}
-                    placeholder="Your name"
-                  />
-                  {errors.name && <div className="error-message">{errors.name}</div>}
-                </div>
-                
-                {/* Email input */}
-                <div className={`form-group ${errors.email ? 'has-error' : ''}`}>
-                  <label htmlFor="email">Email</label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    disabled={formStatus === 'submitting' || formStatus === 'success'}
-                    placeholder="Your email address"
-                  />
-                  {errors.email && <div className="error-message">{errors.email}</div>}
-                </div>
-                
-                {/* Subject input */}
-                <div className="form-group">
-                  <label htmlFor="subject">Subject (Optional)</label>
-                  <input
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleChange}
-                    disabled={formStatus === 'submitting' || formStatus === 'success'}
-                    placeholder="What's this about?"
-                  />
-                </div>
-                
-                {/* Message input */}
-                <div className={`form-group ${errors.message ? 'has-error' : ''}`}>
-                  <label htmlFor="message">Message</label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    disabled={formStatus === 'submitting' || formStatus === 'success'}
-                    placeholder="Your message"
-                    rows={6}
-                  ></textarea>
-                  {errors.message && <div className="error-message">{errors.message}</div>}
-                </div>
-                
-                {/* Submit button */}
-                <div className="form-actions">
-                  <button 
-                    type="submit" 
-                    className={`submit-button ${formStatus === 'submitting' ? 'submitting' : ''} ${formStatus === 'success' ? 'success' : ''}`}
-                    disabled={formStatus === 'submitting' || formStatus === 'success'}
-                  >
-                    {formStatus === 'idle' && 'Send Message'}
-                    {formStatus === 'submitting' && 'Sending...'}
-                    {formStatus === 'success' && 'Sent Successfully'}
-                    {formStatus === 'error' && 'Try Again'}
-                  </button>
-                </div>
-              </div>
-              
-              {/* Success message */}
-              {formStatus === 'success' && (
-                <div className="success-message">
-                  <div className="success-icon">✓</div>
-                  <h4>Message Sent!</h4>
-                  <p>Thank you for reaching out. I'll get back to you as soon as possible.</p>
-                </div>
+          <form ref={formRef} className="contact-form" onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="name" className="circuit-label">
+                Name
+                <CircuitNode position="label-node" small active={touched.name && !formErrors.name} />
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={formState.name}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                className={`circuit-input ${touched.name && formErrors.name ? 'error' : ''}`}
+                disabled={formStatus === 'submitting' || formStatus === 'success'}
+              />
+              {touched.name && formErrors.name && (
+                <span className="error-message">{formErrors.name}</span>
               )}
-              
-              {/* Error message */}
-              {formStatus === 'error' && (
-                <div className="error-summary">
-                  <p>Sorry, there was a problem sending your message. Please try again or contact me directly via email.</p>
-                  <button 
-                    type="button" 
-                    className="retry-button"
-                    onClick={() => setFormStatus('idle')}
-                  >
-                    Try Again
-                  </button>
-                </div>
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="email" className="circuit-label">
+                Email
+                <CircuitNode position="label-node" small active={touched.email && !formErrors.email} />
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formState.email}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                className={`circuit-input ${touched.email && formErrors.email ? 'error' : ''}`}
+                disabled={formStatus === 'submitting' || formStatus === 'success'}
+              />
+              {touched.email && formErrors.email && (
+                <span className="error-message">{formErrors.email}</span>
               )}
-            </form>
-          </div>
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="message" className="circuit-label">
+                Message
+                <CircuitNode position="label-node" small active={touched.message && !formErrors.message} />
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                value={formState.message}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                className={`circuit-input ${touched.message && formErrors.message ? 'error' : ''}`}
+                rows="5"
+                disabled={formStatus === 'submitting' || formStatus === 'success'}
+              ></textarea>
+              {touched.message && formErrors.message && (
+                <span className="error-message">{formErrors.message}</span>
+              )}
+            </div>
+            
+            <div className="form-submit">
+              <button 
+                type="submit" 
+                className={`submit-button ${formStatus ? formStatus : ''}`}
+                disabled={formStatus === 'submitting' || formStatus === 'success'}
+              >
+                {formStatus === 'submitting' ? (
+                  <span className="button-text">
+                    <span className="loading-dots">Sending</span>
+                  </span>
+                ) : formStatus === 'success' ? (
+                  <span className="button-text">Message Sent!</span>
+                ) : formStatus === 'error' ? (
+                  <span className="button-text">Try Again</span>
+                ) : (
+                  <span className="button-text">Send Message</span>
+                )}
+                <CircuitNode position="button-node" active={formStatus === 'success'} />
+              </button>
+            </div>
+            
+            {formStatus === 'success' && (
+              <div className="success-message">
+                <CircuitNode position="success-node" active />
+                <p>Thank you for reaching out! I'll get back to you soon.</p>
+              </div>
+            )}
+            
+            {formStatus === 'error' && (
+              <div className="error-message-container">
+                <CircuitNode position="error-node" active />
+                <p>Something went wrong. Please try again later.</p>
+              </div>
+            )}
+          </form>
         </div>
       </div>
     </section>

@@ -73,3 +73,45 @@ $circuit-node-size: 8px;
 $circuit-path-opacity: 0.7;
 $circuit-glow-intensity: 10px;
 $circuit-pulse-duration: 3s;
+
+// Add these variables to your existing _variables.scss file if they don't already exist
+
+// Colors
+$primary-color: #4CCDFF; // Bright blue for circuit elements
+$secondary-color: #2C84B4; // Darker blue for secondary elements
+$accent-color: #50E3C2; // Teal accent for highlights
+$bg-color: #0C1824; // Dark blue background
+$bg-secondary: #111D2B; // Slightly lighter background for cards/sections
+$text-color: #E5ECFF; // Light blue-white text
+$text-secondary: #9CACBF; // Muted blue-gray for secondary text
+$success-color: #4CAF50; // Green for success states
+$error-color: #E53935; // Red for error states
+$warning-color: #FFC107; // Amber for warning states
+
+// Spacing
+$spacing-xs: 0.25rem;
+$spacing-sm: 0.5rem;
+$spacing-md: 1rem;
+$spacing-lg: 2rem;
+$spacing-xl: 4rem;
+
+// Borders
+$border-radius-sm: 4px;
+$border-radius-md: 8px;
+$border-radius-lg: 12px;
+
+// Shadows
+$shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+$shadow-md: 0 4px 8px rgba(0, 0, 0, 0.15);
+$shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.2);
+
+// Transitions
+$transition-fast: 0.2s ease;
+$transition-normal: 0.3s ease;
+$transition-slow: 0.5s ease;
+
+// Media Breakpoints
+$breakpoint-xs: 480px;
+$breakpoint-sm: 768px;
+$breakpoint-md: 992px;
+$breakpoint-lg: 1200px;
