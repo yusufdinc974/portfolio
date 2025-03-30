@@ -3,7 +3,7 @@ import { gsap } from 'gsap';
 import CircuitNode from '../../components/circuit/CircuitNode';
 import CircuitPath from '../../components/circuit/CircuitPath';
 import { aboutMe } from '../../data/experience';
-import './Bio.scss';
+import './bio.scss';
 
 const Bio = () => {
   const bioRef = useRef(null);
