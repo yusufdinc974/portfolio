@@ -20,17 +20,43 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: "18"
-          cache: 'npm'
+      
+      # Debug: List directory contents
+      - name: List directory contents
+        run: ls -la
+      
+      # Debug: Show Node and npm versions
+      - name: Show versions
+        run: |
+          node --version
+          npm --version
+      
+      # Debug: Show vite.config.js if exists
+      - name: Check vite config
+        run: cat vite.config.js || echo "vite.config.js not found"
+      
       - name: Install dependencies
         run: npm ci
-      - name: Build
-        run: npm run build
+      
+      # Debug: List installed packages
+      - name: List installed packages
+        run: npm list --depth=0
+      
+      - name: Build with verbose logging
+        run: npm run build -- --debug
+      
+      # Debug: Check if dist folder was created
+      - name: Check build output
+        run: ls -la dist || echo "dist folder not created"
+      
       - name: Create .nojekyll file
-        run: touch ./dist/.nojekyll
+        run: touch ./dist/.nojekyll || echo "Could not create .nojekyll file"
+      
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
