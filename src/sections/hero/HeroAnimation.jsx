@@ -182,54 +182,43 @@ const HeroAnimation = () => {
         const pathElement = document.getElementById(dataPackets[index].pathId);
         
         if (pathElement && pathElement.getTotalLength) {
-          const pathLength = pathElement.getTotalLength();
-          const path = MorphSVGPlugin ? MorphSVGPlugin.pathDataToBezier(pathElement.getAttribute('d')) : null;
+          // Use fallback animation method (linear animation)
+          gsap.set(packet, { 
+            opacity: 1,
+            x: 0,
+            y: 0
+          });
           
-          if (path) {
-            // Animate along SVG path if MorphSVGPlugin available
-            gsap.to(packet, { 
-              opacity: 1, 
-              duration: 0.5 
-            });
+          // Extract start and end points from the path
+          const pathData = circuitPaths.find(p => p.id === dataPackets[index].pathId)?.d;
+          if (pathData) {
+            const segments = pathData.split(' ');
+            // Get start point (after 'M')
+            const startSegment = segments[0].replace('M', '').split(',');
+            // Get end point (last segment)
+            const endSegment = segments[segments.length - 1].split(',');
             
-            gsap.to(packet, { 
-              motionPath: { 
-                path: pathElement.getAttribute('d'),
-                align: pathElement,
-                alignOrigin: [0.5, 0.5],
-                autoRotate: true
-              },
-              duration: speed,
-              repeat: -1,
-              ease: "none"
-            });
-          } else {
-            // Fallback animation if MorphSVGPlugin not available
-            gsap.set(packet, { 
-              opacity: 1,
-              x: 0,
-              y: 0
-            });
-            
-            // Find start and end points from the path
-            const startPoint = circuitPaths.find(p => p.id === dataPackets[index].pathId)?.d.split(' ')[0].replace('M', '').split(',');
-            const endSegments = circuitPaths.find(p => p.id === dataPackets[index].pathId)?.d.split(' ');
-            const endPoint = endSegments[endSegments.length - 1].split(',');
-            
-            if (startPoint && startPoint.length === 2 && endPoint && endPoint.length === 2) {
-              gsap.fromTo(packet, 
-                { 
-                  x: parseFloat(startPoint[0]), 
-                  y: parseFloat(startPoint[1]) 
-                },
-                { 
-                  x: parseFloat(endPoint[0]), 
-                  y: parseFloat(endPoint[1]),
-                  duration: speed,
-                  repeat: -1,
-                  ease: "none"
-                }
-              );
+            if (startSegment.length === 2 && endSegment.length === 2) {
+              const startX = parseFloat(startSegment[0]);
+              const startY = parseFloat(startSegment[1]);
+              const endX = parseFloat(endSegment[0]);
+              const endY = parseFloat(endSegment[1]);
+              
+              // Position packet at start point
+              gsap.set(packet, {
+                x: startX,
+                y: startY
+              });
+              
+              // Animate to end point and repeat
+              gsap.to(packet, {
+                x: endX,
+                y: endY,
+                duration: speed,
+                repeat: -1,
+                yoyo: true,
+                ease: "none"
+              });
             }
           }
         }
