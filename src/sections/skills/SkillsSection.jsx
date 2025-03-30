@@ -194,26 +194,6 @@ const SkillsSection = () => {
           </div>
         )}
 
-        {/* Circuit Graph view */}
-        {activeView === 'graph' && (
-          <div className="skills-graph-container">
-            <SkillCircuitGraph skills={skills} />
-            <div className="graph-legend">
-              <div className="legend-title">Skill Categories</div>
-              <div className="legend-items">
-                {skills.map((category, index) => (
-                  <div key={`legend-${category.name}`} className="legend-item">
-                    <span 
-                      className="legend-color" 
-                      style={{ backgroundColor: `var(--color-category-${index % 5})` }}
-                    ></span>
-                    <span className="legend-label">{category.name}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Bottom circuit paths decoration */}
         <div className="bottom-decoration" ref={decorationRef}>
