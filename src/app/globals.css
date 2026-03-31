@@ -1,26 +1,165 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-border: var(--border-color);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-glow: var(--accent-glow);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  --background: #f7f7fb;
+  --foreground: #151522;
+  --surface: rgba(255, 255, 255, 0.82);
+  --surface-hover: rgba(255, 255, 255, 0.95);
+  --border-color: rgba(21, 21, 34, 0.12);
+  --muted: #5b5d73;
+  --accent: #8b5a3c;
+  --accent-hover: #744632;
+  --accent-glow: rgba(139, 90, 60, 0.22);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.18);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(15, 23, 42, 0.28);
+}
+
+.pixelated {
+  image-rendering: pixelated;
+}
+
+.orbit-layer {
+  position: absolute;
+  inset: var(--orbit-inset, -34px);
+  border-radius: 999px;
+  pointer-events: none;
+  animation: orbit-spin 26s linear infinite;
+  z-index: 0;
+}
+
+.orbit-item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: rotate(var(--orbit-angle)) translateX(var(--orbit-radius, 50%));
+  transform-origin: center;
+}
+
+.orbit-sprite {
+  width: 44px;
+  height: 44px;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 6px 10px rgba(15, 23, 42, 0.2));
+  animation: orbit-counter 26s linear infinite;
+}
+
+.orbit-layer--frame {
+  --orbit-inset: -60px;
+  --orbit-radius: calc(50% + 28px);
+}
+
+.hero-pets {
+  position: absolute;
+  left: -8%;
+  right: -8%;
+  bottom: 12%;
+  height: 120px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.hero-pet {
+  position: absolute;
+  top: var(--walk-top, 0px);
+  left: -60px;
+  animation: hero-walk var(--walk-duration, 20s) linear infinite;
+  animation-delay: var(--walk-delay, 0s);
+  transform: translateX(0) scale(var(--walk-scale, 1));
+  filter: drop-shadow(0 8px 14px rgba(15, 23, 42, 0.18));
+}
+
+.hero-pet-sprite {
+  width: 48px;
+  height: 48px;
+  image-rendering: pixelated;
+  opacity: 1;
+}
+
+@media (max-width: 640px) {
+  .orbit-layer {
+    --orbit-inset: -26px;
+  }
+  .orbit-layer--frame {
+    --orbit-inset: -46px;
+    --orbit-radius: calc(50% + 18px);
+  }
+  .orbit-sprite {
+    width: 36px;
+    height: 36px;
+  }
+  .hero-pets {
+    bottom: 16%;
+    height: 96px;
+  }
+  .hero-pet-sprite {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@keyframes orbit-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes orbit-counter {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes hero-walk {
+  0% {
+    transform: translateX(-10%) scale(var(--walk-scale, 1));
+  }
+  100% {
+    transform: translateX(calc(100vw + 120px)) scale(var(--walk-scale, 1));
+  }
 }
