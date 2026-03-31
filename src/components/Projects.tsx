@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import type { Variants } from "framer-motion";
 import { Code, ExternalLink } from "lucide-react";
 import { useEffect, useState } from "react";
 import AnimatedSection from "./AnimatedSection";
@@ -89,7 +90,9 @@ const mapReposToProjects = (repos: GitHubRepo[], count: number) => {
   }));
 };
 
-const containerVariants = {
+const easeStandard: [number, number, number, number] = [0.25, 0.4, 0.25, 1];
+
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
@@ -97,12 +100,12 @@ const containerVariants = {
   },
 };
 
-const cardVariants = {
+const cardVariants: Variants = {
   hidden: { opacity: 0, y: 40 },
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: [0.25, 0.4, 0.25, 1] },
+    transition: { duration: 0.6, ease: easeStandard },
   },
 };
 
